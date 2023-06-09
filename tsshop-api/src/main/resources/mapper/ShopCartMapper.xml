@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.ShopCartMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.ShopCart">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="goods_id" property="goodsId" />
+        <result column="amt" property="amt" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="status" property="status" />
+        <result column="purchase_quantity" property="purchaseQuantity" />
+        <result column="sku_id" property="skuId" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, goods_id, amt, total_amount, status, purchase_quantity, sku_id, update_time, create_time, deleted
+    </sql>
+    <select id="getList" resultType="com.shop.tsshop.web.model.vo.CartListVo">
+        SELECT c.*,g.`name`,s.properties,
+               if(c.sku_id is not null,s.pic,g.head_portrait) as img,
+               if(c.sku_id is not null,s.price,g.price) as price,
+               s.stocks as sStocks,
+               g.stock_number as gStocks,
+               if(g.shelves=2 and g.deleted=0, 0,1) as gShelves,
+               s.`status` as sShelves
+
+        FROM `shop_cart` c
+                 LEFT JOIN goods g on c.goods_id=g.id
+                 LEFT JOIN goods_sku s on s.sku_id=c.sku_id
+        WHERE c.user_id=#{userId}
+    </select>
+    <select id="getListByIds" resultType="com.shop.tsshop.web.model.vo.CartListVo">
+        SELECT c.*,g.`name`,s.properties,
+        if(c.sku_id is not null,s.pic,g.head_portrait) as img,
+        if(c.sku_id is not null,s.price,g.price) as price,
+        s.stocks as sStocks,
+        g.stock_number as gStocks,
+        if(g.shelves=2 and g.deleted=0, 0,1) as gShelves,
+        s.`status` as sShelves,
+        g.delivery_template_id as deliveryTemplateId
+
+        FROM `shop_cart` c
+        LEFT JOIN goods g on c.goods_id=g.id
+        LEFT JOIN goods_sku s on s.sku_id=c.sku_id
+        WHERE c.user_id=#{userId} and c.id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

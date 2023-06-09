@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveStoreMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveStore">
+    <!--@mbg.generated-->
+    <!--@Table live_store-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="store_name" jdbcType="VARCHAR" property="storeName" />
+    <result column="store_phone" jdbcType="VARCHAR" property="storePhone" />
+    <result column="store_head_portrait" jdbcType="VARCHAR" property="storeHeadPortrait" />
+    <result column="amt" jdbcType="VARCHAR" property="amt" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, store_name, store_phone, store_head_portrait, amt, create_time, update_time
+  </sql>
+</mapper>

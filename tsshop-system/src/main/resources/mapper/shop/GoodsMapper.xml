@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.GoodsMapper">
+    
+    <resultMap type="Goods" id="GoodsResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="price"    column="price"    />
+        <result property="shelves"    column="shelves"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="headPortrait"    column="head_portrait"    />
+        <result property="detail"    column="detail"    />
+        <result property="purchaseQuantity"    column="purchase_quantity"    />
+        <result property="goodsTypeId"    column="goods_type_id"    />
+        <result property="csno"    column="csno"    />
+        <result property="unitName"    column="unit_name"    />
+        <result property="scribingPrice"    column="scribing_price"    />
+        <result property="stockNumber"    column="stock_number"    />
+        <result property="sort"    column="sort"    />
+        <result property="deliveryTemplateId"    column="delivery_template_id"    />
+        <result property="weight"    column="weight"    />
+        <result property="volume"    column="volume"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="storeId"    column="store_id"    />
+    </resultMap>
+
+    <sql id="selectGoodsVo">
+        select id, name, price, shelves, deleted, create_time, update_time, head_portrait, detail, purchase_quantity, goods_type_id, csno, unit_name, scribing_price, stock_number, sort, delivery_template_id, weight, volume, area_id, store_id from goods
+    </sql>
+
+    <select id="selectGoodsList" parameterType="Goods" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="shelves != null "> and shelves = #{shelves}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+            <if test="headPortrait != null  and headPortrait != ''"> and head_portrait = #{headPortrait}</if>
+            <if test="detail != null  and detail != ''"> and detail = #{detail}</if>
+            <if test="goodsTypeId != null "> and goods_type_id = #{goodsTypeId}</if>
+            <if test="scribingPrice != null "> and scribing_price = #{scribingPrice}</if>
+            <if test="stockNumber != null "> and stock_number = #{stockNumber}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsById" parameterType="Long" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="id">
+        insert into goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="price != null">price,</if>
+            <if test="shelves != null">shelves,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="headPortrait != null and headPortrait != ''">head_portrait,</if>
+            <if test="detail != null">detail,</if>
+            <if test="purchaseQuantity != null">purchase_quantity,</if>
+            <if test="goodsTypeId != null">goods_type_id,</if>
+            <if test="csno != null">csno,</if>
+            <if test="unitName != null">unit_name,</if>
+            <if test="scribingPrice != null">scribing_price,</if>
+            <if test="stockNumber != null">stock_number,</if>
+            <if test="sort != null">sort,</if>
+            <if test="deliveryTemplateId != null">delivery_template_id,</if>
+            <if test="weight != null">weight,</if>
+            <if test="volume != null">volume,</if>
+            <if test="areaId != null">area_id,</if>
+            <if test="storeId != null">store_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="price != null">#{price},</if>
+            <if test="shelves != null">#{shelves},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="headPortrait != null and headPortrait != ''">#{headPortrait},</if>
+            <if test="detail != null">#{detail},</if>
+            <if test="purchaseQuantity != null">#{purchaseQuantity},</if>
+            <if test="goodsTypeId != null">#{goodsTypeId},</if>
+            <if test="csno != null">#{csno},</if>
+            <if test="unitName != null">#{unitName},</if>
+            <if test="scribingPrice != null">#{scribingPrice},</if>
+            <if test="stockNumber != null">#{stockNumber},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="deliveryTemplateId != null">#{deliveryTemplateId},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="volume != null">#{volume},</if>
+            <if test="areaId != null">#{areaId},</if>
+            <if test="storeId != null">#{storeId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoods" parameterType="Goods">
+        update goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="shelves != null">shelves = #{shelves},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="headPortrait != null and headPortrait != ''">head_portrait = #{headPortrait},</if>
+            <if test="detail != null">detail = #{detail},</if>
+            <if test="purchaseQuantity != null">purchase_quantity = #{purchaseQuantity},</if>
+            <if test="goodsTypeId != null">goods_type_id = #{goodsTypeId},</if>
+            <if test="csno != null">csno = #{csno},</if>
+            <if test="unitName != null">unit_name = #{unitName},</if>
+            <if test="scribingPrice != null">scribing_price = #{scribingPrice},</if>
+            <if test="stockNumber != null">stock_number = #{stockNumber},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="deliveryTemplateId != null">delivery_template_id = #{deliveryTemplateId},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="volume != null">volume = #{volume},</if>
+            <if test="areaId != null">area_id = #{areaId},</if>
+            <if test="storeId != null">store_id = #{storeId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGoodsById" parameterType="Long">
+        delete from goods where id = #{id}
+    </delete>
+
+    <delete id="deleteGoodsByIds" parameterType="String">
+        delete from goods where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

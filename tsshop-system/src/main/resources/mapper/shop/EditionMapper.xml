@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.EditionMapper">
+    
+    <resultMap type="Edition" id="EditionResult">
+        <result property="id"    column="id"    />
+        <result property="verionNo"    column="verion_no"    />
+        <result property="type"    column="type"    />
+        <result property="url"    column="url"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="releaseTime"    column="release_time"    />
+    </resultMap>
+
+    <sql id="selectEditionVo">
+        select id, verion_no, type, url, create_time, update_time, remark, status, release_time from edition
+    </sql>
+
+    <select id="selectEditionList" parameterType="Edition" resultMap="EditionResult">
+        <include refid="selectEditionVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="verionNo != null  and verionNo != ''"> and verion_no = #{verionNo}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="releaseTime != null "> and release_time = #{releaseTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectEditionById" parameterType="Long" resultMap="EditionResult">
+        <include refid="selectEditionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertEdition" parameterType="Edition" useGeneratedKeys="true" keyProperty="id">
+        insert into edition
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="verionNo != null and verionNo != ''">verion_no,</if>
+            <if test="type != null">type,</if>
+            <if test="url != null">url,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="releaseTime != null">release_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="verionNo != null and verionNo != ''">#{verionNo},</if>
+            <if test="type != null">#{type},</if>
+            <if test="url != null">#{url},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="releaseTime != null">#{releaseTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEdition" parameterType="Edition">
+        update edition
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="verionNo != null and verionNo != ''">verion_no = #{verionNo},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEditionById" parameterType="Long">
+        delete from edition where id = #{id}
+    </delete>
+
+    <delete id="deleteEditionByIds" parameterType="String">
+        delete from edition where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

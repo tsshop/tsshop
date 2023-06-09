@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.GoodsSkuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.GoodsSku">
+        <id column="sku_id" property="skuId" />
+        <result column="goods_id" property="goodsId" />
+        <result column="properties" property="properties" />
+        <result column="ori_price" property="oriPrice" />
+        <result column="price" property="price" />
+        <result column="stocks" property="stocks" />
+        <result column="actual_stocks" property="actualStocks" />
+        <result column="update_time" property="updateTime" />
+        <result column="rec_time" property="recTime" />
+        <result column="party_code" property="partyCode" />
+        <result column="pic" property="pic" />
+        <result column="sku_name" property="skuName" />
+        <result column="prod_name" property="prodName" />
+        <result column="version" property="version" />
+        <result column="status" property="status" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        sku_id, goods_id, properties, ori_price, price, stocks, actual_stocks, update_time, rec_time, party_code, pic, sku_name, prod_name, version, status, deleted
+    </sql>
+    <update id="updateStock">
+        UPDATE `goods_sku` set stocks=stocks-#{num} WHERE sku_id=#{id} and stocks>=#{num}
+    </update>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveStoreApplyMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveStoreApply">
+    <!--@mbg.generated-->
+    <!--@Table live_store_apply-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="manager_name" jdbcType="VARCHAR" property="managerName" />
+    <result column="manager_phone" jdbcType="VARCHAR" property="managerPhone" />
+    <result column="manager_id_card" jdbcType="VARCHAR" property="managerIdCard" />
+    <result column="live_store_type" jdbcType="BOOLEAN" property="liveStoreType" />
+    <result column="audit_status" jdbcType="BOOLEAN" property="auditStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="id_card_obverse" jdbcType="VARCHAR" property="idCardObverse" />
+    <result column="id_card_reverse" jdbcType="VARCHAR" property="idCardReverse" />
+    <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
+    <result column="enterprise_name" jdbcType="VARCHAR" property="enterpriseName" />
+    <result column="enterprise_credit_code" jdbcType="VARCHAR" property="enterpriseCreditCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, manager_name, manager_phone, manager_id_card, live_store_type, audit_status, 
+    remark, id_card_obverse, id_card_reverse, business_license, enterprise_name, enterprise_credit_code, 
+    create_time, update_time
+  </sql>
+</mapper>

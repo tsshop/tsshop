@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveStoreWithdrawalsConfigMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveStoreWithdrawalsConfig">
+    <!--@mbg.generated-->
+    <!--@Table live_store_withdrawals_config-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="withdraw_type" jdbcType="VARCHAR" property="withdrawType" />
+    <result column="min_withdraw_amt" jdbcType="DECIMAL" property="minWithdrawAmt" />
+    <result column="max_withdraw_amt" jdbcType="DECIMAL" property="maxWithdrawAmt" />
+    <result column="allowable_withdrawal" jdbcType="BOOLEAN" property="allowableWithdrawal" />
+    <result column="allowable_decimal" jdbcType="BOOLEAN" property="allowableDecimal" />
+    <result column="withdraw_period" jdbcType="BOOLEAN" property="withdrawPeriod" />
+    <result column="withdraw_num" jdbcType="INTEGER" property="withdrawNum" />
+    <result column="withdraw_rate" jdbcType="VARCHAR" property="withdrawRate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, withdraw_type, min_withdraw_amt, max_withdraw_amt, allowable_withdrawal, allowable_decimal, 
+    withdraw_period, withdraw_num, withdraw_rate, create_time, update_time
+  </sql>
+</mapper>

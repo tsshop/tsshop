@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveBroadcastMapper">
+    
+    <resultMap type="LiveBroadcast" id="LiveBroadcastResult">
+        <result property="id"    column="id"    />
+        <result property="liveStoreId"    column="live_store_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="roomId"    column="room_id"    />
+        <result property="reckonTime"    column="reckon_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="status"    column="status"    />
+        <result property="linkNum"    column="link_num"    />
+        <result property="goodsNum"    column="goods_num"    />
+        <result property="personNum"    column="person_num"    />
+        <result property="praiseNum"    column="praise_num"    />
+        <result property="orderProfit"    column="order_profit"    />
+        <result property="giftProfit"    column="gift_profit"    />
+        <result property="giftNum"    column="gift_num"    />
+        <result property="isCash"    column="is_cash"    />
+        <result property="title"    column="title"    />
+        <result property="url"    column="url"    />
+        <result property="describes"    column="describes"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectLiveBroadcastVo">
+        select id, live_store_id, user_id, room_id, reckon_time, start_time, end_time, status, link_num, goods_num, person_num, praise_num, order_profit, gift_profit, gift_num, is_cash, title, url, describes, create_time, update_time from live_broadcast
+    </sql>
+
+    <select id="selectLiveBroadcastList" parameterType="LiveBroadcast" resultMap="LiveBroadcastResult">
+        <include refid="selectLiveBroadcastVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="liveStoreId != null "> and live_store_id = #{liveStoreId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="roomId != null "> and room_id = #{roomId}</if>
+            <if test="reckonTime != null "> and reckon_time = #{reckonTime}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="linkNum != null "> and link_num = #{linkNum}</if>
+            <if test="goodsNum != null "> and goods_num = #{goodsNum}</if>
+            <if test="personNum != null "> and person_num = #{personNum}</if>
+            <if test="praiseNum != null "> and praise_num = #{praiseNum}</if>
+            <if test="orderProfit != null "> and order_profit = #{orderProfit}</if>
+            <if test="giftProfit != null "> and gift_profit = #{giftProfit}</if>
+            <if test="giftNum != null "> and gift_num = #{giftNum}</if>
+            <if test="isCash != null "> and is_cash = #{isCash}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="describes != null  and describes != ''"> and describes = #{describes}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveBroadcastById" parameterType="Long" resultMap="LiveBroadcastResult">
+        <include refid="selectLiveBroadcastVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveBroadcast" parameterType="LiveBroadcast" useGeneratedKeys="true" keyProperty="id">
+        insert into live_broadcast
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="liveStoreId != null">live_store_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="roomId != null">room_id,</if>
+            <if test="reckonTime != null">reckon_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="status != null">status,</if>
+            <if test="linkNum != null">link_num,</if>
+            <if test="goodsNum != null">goods_num,</if>
+            <if test="personNum != null">person_num,</if>
+            <if test="praiseNum != null">praise_num,</if>
+            <if test="orderProfit != null">order_profit,</if>
+            <if test="giftProfit != null">gift_profit,</if>
+            <if test="giftNum != null">gift_num,</if>
+            <if test="isCash != null">is_cash,</if>
+            <if test="title != null">title,</if>
+            <if test="url != null">url,</if>
+            <if test="describes != null">describes,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="liveStoreId != null">#{liveStoreId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="roomId != null">#{roomId},</if>
+            <if test="reckonTime != null">#{reckonTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="linkNum != null">#{linkNum},</if>
+            <if test="goodsNum != null">#{goodsNum},</if>
+            <if test="personNum != null">#{personNum},</if>
+            <if test="praiseNum != null">#{praiseNum},</if>
+            <if test="orderProfit != null">#{orderProfit},</if>
+            <if test="giftProfit != null">#{giftProfit},</if>
+            <if test="giftNum != null">#{giftNum},</if>
+            <if test="isCash != null">#{isCash},</if>
+            <if test="title != null">#{title},</if>
+            <if test="url != null">#{url},</if>
+            <if test="describes != null">#{describes},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveBroadcast" parameterType="LiveBroadcast">
+        update live_broadcast
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="liveStoreId != null">live_store_id = #{liveStoreId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="roomId != null">room_id = #{roomId},</if>
+            <if test="reckonTime != null">reckon_time = #{reckonTime},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="linkNum != null">link_num = #{linkNum},</if>
+            <if test="goodsNum != null">goods_num = #{goodsNum},</if>
+            <if test="personNum != null">person_num = #{personNum},</if>
+            <if test="praiseNum != null">praise_num = #{praiseNum},</if>
+            <if test="orderProfit != null">order_profit = #{orderProfit},</if>
+            <if test="giftProfit != null">gift_profit = #{giftProfit},</if>
+            <if test="giftNum != null">gift_num = #{giftNum},</if>
+            <if test="isCash != null">is_cash = #{isCash},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="describes != null">describes = #{describes},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveBroadcastById" parameterType="Long">
+        delete from live_broadcast where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveBroadcastByIds" parameterType="String">
+        delete from live_broadcast where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

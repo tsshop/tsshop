@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.GoodsPropValueMapper">
+    
+    <resultMap type="GoodsPropValue" id="GoodsPropValueResult">
+        <result property="valueId"    column="value_id"    />
+        <result property="propValue"    column="prop_value"    />
+        <result property="propId"    column="prop_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectGoodsPropValueVo">
+        select value_id, prop_value, prop_id, create_time from goods_prop_value
+    </sql>
+
+    <select id="selectGoodsPropValueList" parameterType="GoodsPropValue" resultMap="GoodsPropValueResult">
+        <include refid="selectGoodsPropValueVo"/>
+        <where>  
+            <if test="propValue != null  and propValue != ''"> and prop_value = #{propValue}</if>
+            <if test="propId != null "> and prop_id = #{propId}</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsPropValueByValueId" parameterType="Long" resultMap="GoodsPropValueResult">
+        <include refid="selectGoodsPropValueVo"/>
+        where value_id = #{valueId}
+    </select>
+        
+    <insert id="insertGoodsPropValue" parameterType="GoodsPropValue" useGeneratedKeys="true" keyProperty="valueId">
+        insert into goods_prop_value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="propValue != null">prop_value,</if>
+            <if test="propId != null">prop_id,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="propValue != null">#{propValue},</if>
+            <if test="propId != null">#{propId},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoodsPropValue" parameterType="GoodsPropValue">
+        update goods_prop_value
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propValue != null">prop_value = #{propValue},</if>
+            <if test="propId != null">prop_id = #{propId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where value_id = #{valueId}
+    </update>
+
+    <delete id="deleteGoodsPropValueByValueId" parameterType="Long">
+        delete from goods_prop_value where value_id = #{valueId}
+    </delete>
+
+    <delete id="deleteGoodsPropValueByValueIds" parameterType="String">
+        delete from goods_prop_value where value_id in 
+        <foreach item="valueId" collection="array" open="(" separator="," close=")">
+            #{valueId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.PayThoroughfareMapper">
+    
+    <resultMap type="PayThoroughfare" id="PayThoroughfareResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="interfaceId"    column="interface_id"    />
+        <result property="interfaceName"    column="interface_name"    />
+        <result property="payProvider"    column="pay_provider"    />
+        <result property="config"    column="config"    />
+        <result property="payTypes"    column="pay_types"    />
+        <result property="isUse"    column="is_use"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPayThoroughfareVo">
+        select id, name, interface_id, interface_name, pay_provider, config, pay_types, is_use, create_time, update_time,support_withdrawals from pay_thoroughfare
+    </sql>
+
+    <select id="selectPayThoroughfareList" parameterType="PayThoroughfare" resultMap="PayThoroughfareResult">
+        <include refid="selectPayThoroughfareVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="interfaceId != null "> and interface_id = #{interfaceId}</if>
+            <if test="interfaceName != null  and interfaceName != ''"> and interface_name = #{interfaceName}</if>
+            <if test="payProvider != null  and payProvider != ''"> and pay_provider = #{payProvider}</if>
+            <if test="config != null  and config != ''"> and config = #{config}</if>
+            <if test="payTypes != null  and payTypes != ''"> and pay_types = #{payTypes}</if>
+            <if test="isUse != null "> and is_use = #{isUse}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayThoroughfareById" parameterType="Long" resultMap="PayThoroughfareResult">
+        <include refid="selectPayThoroughfareVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayThoroughfare" parameterType="PayThoroughfare" useGeneratedKeys="true" keyProperty="id">
+        insert into pay_thoroughfare
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="interfaceId != null">interface_id,</if>
+            <if test="interfaceName != null">interface_name,</if>
+            <if test="payProvider != null">pay_provider,</if>
+            <if test="config != null">config,</if>
+            <if test="payTypes != null">pay_types,</if>
+            <if test="isUse != null">is_use,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="interfaceId != null">#{interfaceId},</if>
+            <if test="interfaceName != null">#{interfaceName},</if>
+            <if test="payProvider != null">#{payProvider},</if>
+            <if test="config != null">#{config},</if>
+            <if test="payTypes != null">#{payTypes},</if>
+            <if test="isUse != null">#{isUse},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayThoroughfare" parameterType="PayThoroughfare">
+        update pay_thoroughfare
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="interfaceId != null">interface_id = #{interfaceId},</if>
+            <if test="interfaceName != null">interface_name = #{interfaceName},</if>
+            <if test="payProvider != null">pay_provider = #{payProvider},</if>
+            <if test="config != null">config = #{config},</if>
+            <if test="payTypes != null">pay_types = #{payTypes},</if>
+            <if test="isUse != null">is_use = #{isUse},</if>
+            <if test="supportWithdrawals != null">support_withdrawals = #{supportWithdrawals},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayThoroughfareById" parameterType="Long">
+        delete from pay_thoroughfare where id = #{id}
+    </delete>
+
+    <delete id="deletePayThoroughfareByIds" parameterType="String">
+        delete from pay_thoroughfare where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

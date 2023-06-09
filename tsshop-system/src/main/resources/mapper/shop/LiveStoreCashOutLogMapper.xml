@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveStoreCashOutLogMapper">
+  <resultMap id="BaseResultMap" type="com.ts.shop.domain.LiveStoreCashOutLog">
+    <!--@mbg.generated-->
+    <!--@Table live_store_cash_out_log-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="out_biz_no" jdbcType="VARCHAR" property="outBizNo" />
+    <result column="pay_fund_order_id" jdbcType="VARCHAR" property="payFundOrderId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="error_code" jdbcType="VARCHAR" property="errorCode" />
+    <result column="error_reason" jdbcType="VARCHAR" property="errorReason" />
+    <result column="trans_date" jdbcType="TIMESTAMP" property="transDate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_id, out_biz_no, pay_fund_order_id, `status`, error_code, error_reason, 
+    trans_date, create_time, update_time
+  </sql>
+</mapper>

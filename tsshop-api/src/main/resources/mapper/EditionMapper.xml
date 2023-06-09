@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.EditionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.Edition">
+        <id column="id" property="id" />
+        <result column="verion_no" property="verionNo" />
+        <result column="type" property="type" />
+        <result column="url" property="url" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="remark" property="remark" />
+        <result column="status" property="status" />
+        <result column="release_time" property="releaseTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, verion_no, type, url, create_time, update_time, remark, status, release_time
+    </sql>
+    <select id="getEdition" resultType="com.shop.tsshop.web.model.vo.EditionVo">
+        SELECT * FROM `edition` WHERE type=#{type} and `status`=1 and release_time &lt;= NOW() LIMIT 1
+    </select>
+
+</mapper>

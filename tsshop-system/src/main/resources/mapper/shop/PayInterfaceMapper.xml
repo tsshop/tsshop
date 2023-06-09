@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.PayInterfaceMapper">
+    
+    <resultMap type="PayInterface" id="PayInterfaceResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="payProvider"    column="pay_provider"    />
+        <result property="configTemplate"    column="config_template"    />
+        <result property="payTypes"    column="pay_types"    />
+        <result property="isUse"    column="is_use"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPayInterfaceVo">
+        select id, name, pay_provider, config_template, pay_types, is_use, create_time, update_time from pay_interface
+    </sql>
+
+    <select id="selectPayInterfaceList" parameterType="PayInterface" resultMap="PayInterfaceResult">
+        <include refid="selectPayInterfaceVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="payProvider != null  and payProvider != ''"> and pay_provider = #{payProvider}</if>
+            <if test="configTemplate != null  and configTemplate != ''"> and config_template = #{configTemplate}</if>
+            <if test="payTypes != null  and payTypes != ''"> and pay_types = #{payTypes}</if>
+            <if test="isUse != null "> and is_use = #{isUse}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayInterfaceById" parameterType="Long" resultMap="PayInterfaceResult">
+        <include refid="selectPayInterfaceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayInterface" parameterType="PayInterface" useGeneratedKeys="true" keyProperty="id">
+        insert into pay_interface
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="payProvider != null">pay_provider,</if>
+            <if test="configTemplate != null">config_template,</if>
+            <if test="payTypes != null">pay_types,</if>
+            <if test="isUse != null">is_use,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="payProvider != null">#{payProvider},</if>
+            <if test="configTemplate != null">#{configTemplate},</if>
+            <if test="payTypes != null">#{payTypes},</if>
+            <if test="isUse != null">#{isUse},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayInterface" parameterType="PayInterface">
+        update pay_interface
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="payProvider != null">pay_provider = #{payProvider},</if>
+            <if test="configTemplate != null">config_template = #{configTemplate},</if>
+            <if test="payTypes != null">pay_types = #{payTypes},</if>
+            <if test="isUse != null">is_use = #{isUse},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayInterfaceById" parameterType="Long">
+        delete from pay_interface where id = #{id}
+    </delete>
+
+    <delete id="deletePayInterfaceByIds" parameterType="String">
+        delete from pay_interface where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

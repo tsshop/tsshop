@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.UserLiveGiftMapper">
+    
+    <resultMap type="UserLiveGift" id="UserLiveGiftResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="liveGiftId"    column="live_gift_id"    />
+        <result property="liveGiftNum"    column="live_gift_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserLiveGiftVo">
+        select ulg.id, user_id, live_gift_id, live_gift_num, lg.gift_name as liveGiftName, ulg.create_time, ulg.update_time from user_live_gift as ulg
+    </sql>
+
+    <select id="selectUserLiveGiftList" parameterType="UserLiveGift" resultMap="UserLiveGiftResult">
+        <include refid="selectUserLiveGiftVo"/>
+        left join live_gift as lg on lg.id = ulg.live_gift_id
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="liveGiftId != null "> and live_gift_id = #{liveGiftId}</if>
+            <if test="liveGiftName != null "> and lg.gift_name like concat('%', #{liveGiftName}, '%')</if>
+            <if test="liveGiftNum != null  and liveGiftNum != ''"> and live_gift_num = #{liveGiftNum}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserLiveGiftById" parameterType="Long" resultMap="UserLiveGiftResult">
+        <include refid="selectUserLiveGiftVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserLiveGift" parameterType="UserLiveGift" useGeneratedKeys="true" keyProperty="id">
+        insert into user_live_gift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="liveGiftId != null">live_gift_id,</if>
+            <if test="liveGiftNum != null">live_gift_num,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="liveGiftId != null">#{liveGiftId},</if>
+            <if test="liveGiftNum != null">#{liveGiftNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserLiveGift" parameterType="UserLiveGift">
+        update user_live_gift
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="liveGiftId != null">live_gift_id = #{liveGiftId},</if>
+            <if test="liveGiftNum != null">live_gift_num = #{liveGiftNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserLiveGiftById" parameterType="Long">
+        delete from user_live_gift where id = #{id}
+    </delete>
+
+    <delete id="deleteUserLiveGiftByIds" parameterType="String">
+        delete from user_live_gift where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

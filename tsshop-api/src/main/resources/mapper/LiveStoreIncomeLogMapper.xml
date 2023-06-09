@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveStoreIncomeLogMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveStoreIncomeLog">
+    <!--@mbg.generated-->
+    <!--@Table live_store_income_log-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="live_store_id" jdbcType="VARCHAR" property="liveStoreId" />
+    <result column="amt" jdbcType="VARCHAR" property="amt" />
+    <result column="income_type" jdbcType="VARCHAR" property="incomeType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, live_store_id, amt, income_type, create_time, update_time
+  </sql>
+</mapper>

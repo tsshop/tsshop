@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.PayTypeMapper">
+    
+    <resultMap type="PayType" id="PayTypeResult">
+        <result property="id"    column="id"    />
+        <result property="logo"    column="logo"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPayTypeVo">
+        select id, logo, name, type, type_name, create_time, update_time from pay_type
+    </sql>
+
+    <select id="selectPayTypeList" parameterType="PayType" resultMap="PayTypeResult">
+        <include refid="selectPayTypeVo"/>
+        <where>  
+            <if test="logo != null  and logo != ''"> and logo = #{logo}</if>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="typeName != null  and typeName != ''"> and type_name = #{typeName}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayTypeById" parameterType="Long" resultMap="PayTypeResult">
+        <include refid="selectPayTypeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayType" parameterType="PayType" useGeneratedKeys="true" keyProperty="id">
+        insert into pay_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logo != null and logo != ''">logo,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="typeName != null and typeName != ''">type_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logo != null and logo != ''">#{logo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="typeName != null and typeName != ''">#{typeName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayType" parameterType="PayType">
+        update pay_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logo != null and logo != ''">logo = #{logo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="typeName != null and typeName != ''">type_name = #{typeName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayTypeById" parameterType="Long">
+        delete from pay_type where id = #{id}
+    </delete>
+
+    <delete id="deletePayTypeByIds" parameterType="String">
+        delete from pay_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

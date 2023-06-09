@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.FeedbackMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.Feedback">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="type" property="type" />
+        <result column="detail" property="detail" />
+        <result column="image" property="image" />
+        <result column="status" property="status" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="opinion" property="opinion" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, create_time, update_time, type, detail, image, status, name, phone, opinion
+    </sql>
+
+</mapper>

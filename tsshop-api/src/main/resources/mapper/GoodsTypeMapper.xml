@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.GoodsTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.GoodsType">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="avatar" property="avatar" />
+        <result column="banner" property="banner" />
+        <result column="name" property="name" />
+        <result column="deleted" property="deleted" />
+        <result column="sort" property="sort" />
+        <result column="p_type_id" property="pTypeId" />
+        <result column="level" property="level" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="tree" type="com.shop.tsshop.web.model.vo.GoodsTypeVo">
+        <id column="yiId" property="id" />
+        <result column="yiName" property="name" />
+        <result column="yiAvatar" property="avatar" />
+        <result column="yiBanner" property="banner" />
+        <collection property="node" javaType="java.util.ArrayList" ofType="com.shop.tsshop.web.model.vo.GoodsTypeVo">
+            <id column="erId" property="id" />
+            <result column="erName" property="name" />
+            <result column="erAvatar" property="avatar" />
+            <result column="erBanner" property="banner" />
+            <collection property="node" javaType="java.util.ArrayList" ofType="com.shop.tsshop.web.model.vo.GoodsTypeVo">
+                <id column="sId" property="id" />
+                <result column="sName" property="name" />
+                <result column="sAvatar" property="avatar" />
+                <result column="sBanner" property="banner" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, create_time, update_time, avatar, banner, name, deleted, sort, p_type_id, level
+    </sql>
+    <select id="getType" resultMap="tree">
+        SELECT
+            t.`name` as yiName,
+            t.avatar as yiAvatar,
+            t.`banner` as yiBanner,
+            t.`id` as yiId,
+
+            t2.`name` as erName,
+            t2.avatar as erAvatar,
+            t2.`banner` as erBanner,
+            t2.`id` as erId,
+
+            t3.`name` as sName,
+            t3.avatar as sAvatar,
+            t3.`banner` as sBanner,
+            t3.`id` as sId
+        FROM `goods_type` t
+                 LEFT JOIN `goods_type` t2 on t.id=t2.p_type_id
+                 LEFT JOIN `goods_type` t3 on t2.id=t3.p_type_id
+        WHERE t.`level`=0 and t.deleted=0
+    </select>
+</mapper>

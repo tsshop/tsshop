@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveStoreWithdrawalsLogMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveStoreWithdrawalsLog">
+    <!--@mbg.generated-->
+    <!--@Table live_store_withdrawals_log-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="amt" jdbcType="DECIMAL" property="amt" />
+    <result column="status" jdbcType="BOOLEAN" property="status" />
+    <result column="live_store_id" jdbcType="BIGINT" property="liveStoreId" />
+    <result column="withdrawals_type" jdbcType="TINYINT" property="withdrawalsType" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, amt, `status`, live_store_id, withdrawals_type, real_name, account, create_time, 
+    update_time
+  </sql>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.AreaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.Area">
+        <id column="area_id" property="areaId" />
+        <result column="area_name" property="areaName" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="tree" type="com.shop.tsshop.web.model.vo.AreaVo">
+        <id column="provinceId" property="id" />
+        <result column="provinceName" property="name" />
+        <result column="provinceLevel" property="level" />
+        <result column="provinceUpid" property="upid" />
+        <collection property="node" javaType="java.util.ArrayList" ofType="com.shop.tsshop.web.model.vo.AreaVo">
+            <id column="cityId" property="id" />
+            <result column="cityName" property="name" />
+            <result column="cityLevel" property="level" />
+            <result column="cityUpid" property="upid" />
+            <collection property="node" javaType="java.util.ArrayList" ofType="com.shop.tsshop.web.model.vo.AreaVo">
+                <id column="areaId" property="id" />
+                <result column="areaName" property="name" />
+                <result column="areaLevel" property="level" />
+                <result column="areaUpid" property="upid" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        area_id, area_name, parent_id, level
+    </sql>
+
+    <select id="getDistrict" resultMap="tree">
+        SELECT
+            a.area_id AS provinceId,
+            a.parent_id AS provinceUpid,
+            a.`LEVEL` AS provinceLevel,
+            a.area_name AS provinceName,
+            b.area_id AS cityId,
+            b.parent_id AS cityUpid,
+            b.`LEVEL` AS cityLevel,
+            b.area_name AS cityName,
+            c.area_id AS areaId,
+            c.parent_id AS areaUpid,
+            c.`LEVEL` AS areaLevel,
+            c.area_name AS areaName
+        FROM
+            area a
+                LEFT JOIN area b ON a.area_id = b.parent_id
+                LEFT JOIN area c ON b.area_id = c.parent_id
+        WHERE
+            a.parent_id = 0
+    </select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.ReturnOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.ReturnOrder">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="order_no" property="orderNo" />
+        <result column="really_amt" property="reallyAmt" />
+        <result column="order_amt" property="orderAmt" />
+        <result column="return_amt" property="returnAmt" />
+        <result column="return_reason" property="returnReason" />
+        <result column="return_img" property="returnImg" />
+        <result column="return_type" property="returnType" />
+        <result column="return_detail" property="returnDetail" />
+        <result column="address_id" property="addressId" />
+        <result column="status" property="status" />
+        <result column="express_name" property="expressName" />
+        <result column="express_no" property="expressNo" />
+        <result column="express" property="express" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="refuse_detail" property="refuseDetail" />
+        <result column="out_refund_no" property="outRefundNo" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, order_no, really_amt, order_amt, return_amt, return_reason, return_img, return_type, return_detail, address_id, status, express_name, express_no, express, create_time, update_time, refuse_detail, out_refund_no
+    </sql>
+    <select id="getList" resultType="com.shop.tsshop.web.model.vo.ReturnOrderListVo">
+        SELECT r.*,o.quantity,g.name,g.head_portrait as gPic,g.price as gPrice,s.price as sPrice,s.pic as sPic,s.properties
+        FROM `return_order` r
+                 LEFT JOIN `order` o on r.order_no=o.order_no
+                 LEFT JOIN goods g on o.goods_id=g.id
+                 LEFT JOIN goods_sku s on s.sku_id=o.sku_id
+        WHERE r.user_id=#{userId}
+    </select>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.Order">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="user_id" property="userId" />
+        <result column="sku_id" property="skuId" />
+        <result column="goods_id" property="goodsId" />
+        <result column="address_id" property="addressId" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="amount" property="amount" />
+        <result column="price" property="price" />
+        <result column="quantity" property="quantity" />
+        <result column="freight" property="freight" />
+        <result column="order_status" property="orderStatus" />
+        <result column="pay_time" property="payTime" />
+        <result column="send_time" property="sendTime" />
+        <result column="pay_no" property="payNo" />
+        <result column="express_no" property="expressNo" />
+        <result column="express" property="express" />
+        <result column="order_no_pay" property="orderNoPay" />
+        <result column="return_id" property="returnId" />
+        <result column="remark" property="remark" />
+        <result column="ip" property="ip" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, user_id, sku_id, goods_id, address_id, total_amount, amount, price, quantity, freight, order_status, pay_time, send_time, payment_transaction_number, express_no, express, order_no_pay, return_id, remark, ip, create_time, update_time, deleted
+    </sql>
+    <select id="getListByStatus" resultType="com.shop.tsshop.web.model.vo.OrderDetailVo">
+        SELECT o.*,
+               g.`name` as goodsName,
+               g.head_portrait as src,
+               s.properties as sku,
+               (r.id ) as isReview
+        FROM `order` o
+        LEFT JOIN goods g on o.goods_id=g.id
+        LEFT JOIN goods_sku s on o.sku_id=s.sku_id
+        LEFT JOIN goods_review r on r.order_id =o.id
+        <where>
+            o.user_id=#{userId}
+            <if test="orderStatus != null"> and o.order_status = #{orderStatus}</if>
+        </where>
+    </select>
+    <select id="selectListByLiveStoreId" resultType="com.shop.tsshop.web.model.vo.OrderDetailVo">
+        SELECT o.*,
+           g.`name` as goodsName,
+           g.head_portrait as src,
+           s.properties as sku,
+           (r.id ) as isReview
+        FROM `order` o
+        LEFT JOIN goods g on o.goods_id=g.id
+        LEFT JOIN goods_sku s on o.sku_id=s.sku_id
+        LEFT JOIN goods_review r on r.order_id =o.id
+        <where>
+            o.live_store_id = #{liveStoreId}
+            and o.order_type = 3
+            <if test="dto.orderStatus != null"> and o.order_status = #{dto.orderStatus}</if>
+            <if test="dto.keyword != null and dto.keyword != ''">
+                and g.`name` LIKE CONCAT('%',#{dto.keyword},'%')
+            </if>
+        </where>
+        ORDER BY o.create_time DESC
+</select>
+    <select id="liveGiftBuyRecord" resultType="com.shop.tsshop.web.model.vo.LiveGiftBuyRecordVo">
+        SELECT
+            o.id           as orderId,
+            lg.gift_name   as giftName,
+            o.order_no     as orderNo,
+            pl.pay_time    as buyTime,
+            o.total_amount as totalAmount,
+            o.quantity     as quantity
+        FROM
+            `order` as o
+        LEFT JOIN
+            live_gift as lg
+        ON
+            o.goods_id = lg.id
+        LEFT JOIN
+            pay_log as pl
+        ON
+            o.pay_log_id = pl.id
+        WHERE
+            o.user_id = #{userId}
+        AND
+            o.order_status = 3
+        AND
+            o.order_type = 1
+        ORDER BY pl.pay_time DESC
+    </select>
+</mapper>

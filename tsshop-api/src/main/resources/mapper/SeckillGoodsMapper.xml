@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.SeckillGoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.SeckillGoods">
+        <id column="id" property="id" />
+        <result column="goods_id" property="goodsId" />
+        <result column="sku_id" property="skuId" />
+        <result column="offer" property="offer" />
+        <result column="seckill_id" property="seckillId" />
+        <result column="time" property="time" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, goods_id, sku_id, offer, seckill_id, time, create_time, update_time
+    </sql>
+    <update id="updateStock">
+        UPDATE `seckill_goods` set stock=stock-#{num},quantity=quantity+#{num} WHERE id=#{id} and stock>=#{num}
+    </update>
+    <select id="selectGoodsVo" resultType="com.shop.tsshop.web.model.vo.SeckillGoodsVo">
+        SELECT
+            if(sg.sku_id=0,g.price,sku.price) as price,
+            g.`name` as `name`,
+            if(sg.sku_id=0,g.head_portrait,sku.pic) as src,
+            sg.*
+        FROM goods g
+                 LEFT JOIN seckill_goods sg on g.id=sg.goods_id
+                 LEFT JOIN goods_sku sku on sku.sku_id=sg.sku_id
+        WHERE sg.seckill_id=#{seckillId}
+            <if test="time!='-1'.toString()"> and `time`=#{time} </if>
+    </select>
+    <select id="getGoodsById" resultType="com.shop.tsshop.web.model.domain.SeckillGoods">
+        SELECT sg.* FROM seckill_goods  sg
+                             LEFT JOIN seckill s on s.id =sg.seckill_id
+        WHERE s.`status`=1
+        <if test="k=='1'.toString()"> and sku_id=#{id} </if>
+        <if test="k=='2'.toString()"> and goods_id=#{id} AND sku_id=0 </if>
+    </select>
+    <select id="getGoodsListById" resultType="com.shop.tsshop.web.model.domain.SeckillGoods">
+        SELECT sg.* FROM seckill_goods  sg
+        LEFT JOIN seckill s on s.id =sg.seckill_id
+        WHERE s.`status`=1 and goods_id=#{id} order by sg.time
+    </select>
+
+</mapper>

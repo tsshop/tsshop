@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.GoodsTypeMapper">
+    
+    <resultMap type="GoodsType" id="GoodsTypeResult">
+        <result property="id"    column="id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="banner"    column="banner"    />
+        <result property="name"    column="name"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="sort"    column="sort"    />
+        <result property="pTypeId"    column="p_type_id"    />
+        <result property="level"    column="level"    />
+    </resultMap>
+
+    <sql id="selectGoodsTypeVo">
+        select id, create_time, update_time, avatar, banner, name, deleted, sort, p_type_id, level from goods_type
+    </sql>
+
+    <select id="selectGoodsTypeList" parameterType="GoodsType" resultMap="GoodsTypeResult">
+        <include refid="selectGoodsTypeVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="updateTime != null "> and update_time like concat('%', #{updateTime}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="pTypeId != null "> and p_type_id = #{pTypeId}</if>
+            <if test="level != null "> and level = #{level}</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsTypeById" parameterType="Long" resultMap="GoodsTypeResult">
+        <include refid="selectGoodsTypeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGoodsType" parameterType="GoodsType" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="banner != null">banner,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="sort != null">sort,</if>
+            <if test="pTypeId != null">p_type_id,</if>
+            <if test="level != null">level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="banner != null">#{banner},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="pTypeId != null">#{pTypeId},</if>
+            <if test="level != null">#{level},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoodsType" parameterType="GoodsType">
+        update goods_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="banner != null">banner = #{banner},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="pTypeId != null">p_type_id = #{pTypeId},</if>
+            <if test="level != null">level = #{level},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGoodsTypeById" parameterType="Long">
+        delete from goods_type where id = #{id}
+    </delete>
+
+    <delete id="deleteGoodsTypeByIds" parameterType="String">
+        delete from goods_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveGiftMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveGift">
+    <!--@mbg.generated-->
+    <!--@Table live_gift-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_by" jdbcType="VARCHAR" property="orderBy" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="front" jdbcType="VARCHAR" property="front" />
+    <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="deleted" jdbcType="BOOLEAN" property="deleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_by, `name`, front, unit_price, deleted, create_time, update_time
+  </sql>
+</mapper>

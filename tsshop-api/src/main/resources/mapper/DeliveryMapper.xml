@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.DeliveryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.Delivery">
+        <id column="id" property="id" />
+        <result column="dvy_name" property="dvyName" />
+        <result column="company_home_url" property="companyHomeUrl" />
+        <result column="rec_time" property="recTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="query_url" property="queryUrl" />
+        <result column="express_bird" property="expressBird" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, dvy_name, company_home_url, rec_time, modify_time, query_url, express_bird
+    </sql>
+
+</mapper>

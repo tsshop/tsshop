@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveGiftMapper">
+    
+    <resultMap type="LiveGift" id="LiveGiftResult">
+        <result property="id"    column="id"    />
+        <result property="giftOrderBy"    column="gift_order_by"    />
+        <result property="giftName"    column="gift_name"    />
+        <result property="front"    column="front"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="giftRate"    column="gift_rate"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="shelves"    column="shelves"    />
+    </resultMap>
+
+    <sql id="selectLiveGiftVo">
+        select id, gift_order_by, gift_name, front, unit_price, gift_rate, deleted, create_time, update_time, shelves from live_gift
+    </sql>
+
+    <select id="selectLiveGiftList" parameterType="LiveGift" resultMap="LiveGiftResult">
+        <include refid="selectLiveGiftVo"/>
+        <where>  
+            <if test="giftName != null  and giftName != ''"> and gift_name like concat('%', #{giftName}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+            <if test="shelves != null "> and shelves = #{shelves}</if>
+        </where>
+        ORDER BY gift_order_by ASC
+    </select>
+    
+    <select id="selectLiveGiftById" parameterType="Long" resultMap="LiveGiftResult">
+        <include refid="selectLiveGiftVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveGift" parameterType="LiveGift" useGeneratedKeys="true" keyProperty="id">
+        insert into live_gift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="giftOrderBy != null">gift_order_by,</if>
+            <if test="giftName != null">gift_name,</if>
+            <if test="front != null">front,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="giftRate != null">gift_rate,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="shelves != null">shelves,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="giftOrderBy != null">#{giftOrderBy},</if>
+            <if test="giftName != null">#{giftName},</if>
+            <if test="front != null">#{front},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="giftRate != null">#{giftRate},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="shelves != null">#{shelves},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveGift" parameterType="LiveGift">
+        update live_gift
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="giftOrderBy != null">gift_order_by = #{giftOrderBy},</if>
+            <if test="giftName != null">gift_name = #{giftName},</if>
+            <if test="front != null">front = #{front},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="giftRate != null">gift_rate = #{giftRate},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="shelves != null">shelves = #{shelves},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveGiftById" parameterType="Long">
+        delete from live_gift where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveGiftByIds" parameterType="String">
+        delete from live_gift where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

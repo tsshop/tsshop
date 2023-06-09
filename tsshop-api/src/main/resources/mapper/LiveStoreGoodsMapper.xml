@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.LiveStoreGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.LiveStoreGoods">
+    <!--@mbg.generated-->
+    <!--@Table live_store_goods-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="order_by" jdbcType="INTEGER" property="orderBy" />
+    <result column="deleted" jdbcType="BOOLEAN" property="deleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, goods_id, order_by, deleted, create_time, update_time
+  </sql>
+  <select id="selectGoodsList" resultType="com.shop.tsshop.web.model.vo.LiveStoreGoodsVo">
+        SELECT
+            gd.id             as id,
+            gd.`name`         as name,
+            gd.head_portrait  as headPortrait,
+            gd.scribing_price as scribingPrice,
+            gd.price          as price
+        FROM
+            live_store_goods  as lsg
+        LEFT JOIN
+            goods             as gd
+        ON
+            lsg.goods_id = gd.id
+        WHERE
+            lsg.live_store_id = #{storeId}
+        and
+            lsg.deleted = 0
+        and
+            gd.deleted = 0
+        <if test="dto.keyword != null and dto.keyword != ''">
+            and gd.`name` LIKE CONCAT('%',#{dto.keyword},'%')
+        </if>
+        ORDER BY lsg.order_by IS NULL, lsg.order_by,lsg.update_time DESC
+<!--        ORDER BY FIELD(lsg.order_by,0)-->
+  </select>
+</mapper>

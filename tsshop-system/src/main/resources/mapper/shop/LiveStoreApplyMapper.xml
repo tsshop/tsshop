@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveStoreApplyMapper">
+    
+    <resultMap type="LiveStoreApply" id="LiveStoreApplyResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="managerName"    column="manager_name"    />
+        <result property="managerPhone"    column="manager_phone"    />
+        <result property="managerIdCard"    column="manager_id_card"    />
+        <result property="liveStoreType"    column="live_store_type"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="idCardObverse"    column="id_card_obverse"    />
+        <result property="idCardReverse"    column="id_card_reverse"    />
+        <result property="businessLicense"    column="business_license"    />
+        <result property="enterpriseName"    column="enterprise_name"    />
+        <result property="enterpriseCreditCode"    column="enterprise_credit_code"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectLiveStoreApplyVo">
+        select id, user_id, manager_name, manager_phone, manager_id_card, live_store_type, audit_status, remark, id_card_obverse, id_card_reverse, business_license, enterprise_name, enterprise_credit_code, create_time, update_time from live_store_apply
+    </sql>
+
+    <select id="selectLiveStoreApplyList" parameterType="LiveStoreApply" resultMap="LiveStoreApplyResult">
+        <include refid="selectLiveStoreApplyVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="managerName != null  and managerName != ''"> and manager_name like concat('%', #{managerName}, '%')</if>
+            <if test="managerPhone != null  and managerPhone != ''"> and manager_phone like concat('%', #{managerPhone}, '%')</if>
+            <if test="managerIdCard != null  and managerIdCard != ''"> and manager_id_card like concat('%', #{managerIdCard}, '%')</if>
+            <if test="liveStoreType != null "> and live_store_type = #{liveStoreType}</if>
+            <if test="auditStatus != null "> and audit_status = #{auditStatus}</if>
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like concat('%', #{enterpriseName}, '%')</if>
+            <if test="enterpriseCreditCode != null  and enterpriseCreditCode != ''"> and enterprise_credit_code = #{enterpriseCreditCode}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveStoreApplyById" parameterType="Long" resultMap="LiveStoreApplyResult">
+        <include refid="selectLiveStoreApplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveStoreApply" parameterType="LiveStoreApply">
+        insert into live_store_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="managerName != null">manager_name,</if>
+            <if test="managerPhone != null">manager_phone,</if>
+            <if test="managerIdCard != null">manager_id_card,</if>
+            <if test="liveStoreType != null">live_store_type,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="idCardObverse != null">id_card_obverse,</if>
+            <if test="idCardReverse != null">id_card_reverse,</if>
+            <if test="businessLicense != null">business_license,</if>
+            <if test="enterpriseName != null">enterprise_name,</if>
+            <if test="enterpriseCreditCode != null">enterprise_credit_code,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="managerName != null">#{managerName},</if>
+            <if test="managerPhone != null">#{managerPhone},</if>
+            <if test="managerIdCard != null">#{managerIdCard},</if>
+            <if test="liveStoreType != null">#{liveStoreType},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="idCardObverse != null">#{idCardObverse},</if>
+            <if test="idCardReverse != null">#{idCardReverse},</if>
+            <if test="businessLicense != null">#{businessLicense},</if>
+            <if test="enterpriseName != null">#{enterpriseName},</if>
+            <if test="enterpriseCreditCode != null">#{enterpriseCreditCode},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveStoreApply" parameterType="LiveStoreApply">
+        update live_store_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="managerName != null">manager_name = #{managerName},</if>
+            <if test="managerPhone != null">manager_phone = #{managerPhone},</if>
+            <if test="managerIdCard != null">manager_id_card = #{managerIdCard},</if>
+            <if test="liveStoreType != null">live_store_type = #{liveStoreType},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="idCardObverse != null">id_card_obverse = #{idCardObverse},</if>
+            <if test="idCardReverse != null">id_card_reverse = #{idCardReverse},</if>
+            <if test="businessLicense != null">business_license = #{businessLicense},</if>
+            <if test="enterpriseName != null">enterprise_name = #{enterpriseName},</if>
+            <if test="enterpriseCreditCode != null">enterprise_credit_code = #{enterpriseCreditCode},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveStoreApplyById" parameterType="Long">
+        delete from live_store_apply where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveStoreApplyByIds" parameterType="String">
+        delete from live_store_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

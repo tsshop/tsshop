@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveStoreWithdrawalsConfigMapper">
+    
+    <resultMap type="LiveStoreWithdrawalsConfig" id="LiveStoreWithdrawalsConfigResult">
+        <result property="id"    column="id"    />
+        <result property="withdrawType"    column="withdraw_type"    />
+        <result property="minWithdrawAmt"    column="min_withdraw_amt"    />
+        <result property="maxWithdrawAmt"    column="max_withdraw_amt"    />
+        <result property="allowableWithdrawal"    column="allowable_withdrawal"    />
+        <result property="allowableDecimal"    column="allowable_decimal"    />
+        <result property="withdrawPeriod"    column="withdraw_period"    />
+        <result property="withdrawNum"    column="withdraw_num"    />
+        <result property="withdrawRate"    column="withdraw_rate"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectLiveStoreWithdrawalsConfigVo">
+        select id, withdraw_type, min_withdraw_amt, max_withdraw_amt, allowable_withdrawal, allowable_decimal, withdraw_period, withdraw_num, withdraw_rate, create_time, update_time from live_store_withdrawals_config
+    </sql>
+
+    <select id="selectLiveStoreWithdrawalsConfigList" parameterType="LiveStoreWithdrawalsConfig" resultMap="LiveStoreWithdrawalsConfigResult">
+        <include refid="selectLiveStoreWithdrawalsConfigVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="withdrawType != null  and withdrawType != ''"> and withdraw_type = #{withdrawType}</if>
+            <if test="minWithdrawAmt != null "> and min_withdraw_amt = #{minWithdrawAmt}</if>
+            <if test="maxWithdrawAmt != null "> and max_withdraw_amt = #{maxWithdrawAmt}</if>
+            <if test="allowableWithdrawal != null "> and allowable_withdrawal = #{allowableWithdrawal}</if>
+            <if test="allowableDecimal != null "> and allowable_decimal = #{allowableDecimal}</if>
+            <if test="withdrawPeriod != null "> and withdraw_period = #{withdrawPeriod}</if>
+            <if test="withdrawNum != null "> and withdraw_num = #{withdrawNum}</if>
+            <if test="withdrawRate != null  and withdrawRate != ''"> and withdraw_rate = #{withdrawRate}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveStoreWithdrawalsConfigById" parameterType="Long" resultMap="LiveStoreWithdrawalsConfigResult">
+        <include refid="selectLiveStoreWithdrawalsConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveStoreWithdrawalsConfig" parameterType="LiveStoreWithdrawalsConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into live_store_withdrawals_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="withdrawType != null">withdraw_type,</if>
+            <if test="minWithdrawAmt != null">min_withdraw_amt,</if>
+            <if test="maxWithdrawAmt != null">max_withdraw_amt,</if>
+            <if test="allowableWithdrawal != null">allowable_withdrawal,</if>
+            <if test="allowableDecimal != null">allowable_decimal,</if>
+            <if test="withdrawPeriod != null">withdraw_period,</if>
+            <if test="withdrawNum != null">withdraw_num,</if>
+            <if test="withdrawRate != null">withdraw_rate,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="withdrawType != null">#{withdrawType},</if>
+            <if test="minWithdrawAmt != null">#{minWithdrawAmt},</if>
+            <if test="maxWithdrawAmt != null">#{maxWithdrawAmt},</if>
+            <if test="allowableWithdrawal != null">#{allowableWithdrawal},</if>
+            <if test="allowableDecimal != null">#{allowableDecimal},</if>
+            <if test="withdrawPeriod != null">#{withdrawPeriod},</if>
+            <if test="withdrawNum != null">#{withdrawNum},</if>
+            <if test="withdrawRate != null">#{withdrawRate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveStoreWithdrawalsConfig" parameterType="LiveStoreWithdrawalsConfig">
+        update live_store_withdrawals_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="withdrawType != null">withdraw_type = #{withdrawType},</if>
+            <if test="minWithdrawAmt != null">min_withdraw_amt = #{minWithdrawAmt},</if>
+            <if test="maxWithdrawAmt != null">max_withdraw_amt = #{maxWithdrawAmt},</if>
+            <if test="allowableWithdrawal != null">allowable_withdrawal = #{allowableWithdrawal},</if>
+            <if test="allowableDecimal != null">allowable_decimal = #{allowableDecimal},</if>
+            <if test="withdrawPeriod != null">withdraw_period = #{withdrawPeriod},</if>
+            <if test="withdrawNum != null">withdraw_num = #{withdrawNum},</if>
+            <if test="withdrawRate != null">withdraw_rate = #{withdrawRate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveStoreWithdrawalsConfigById" parameterType="Long">
+        delete from live_store_withdrawals_config where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveStoreWithdrawalsConfigByIds" parameterType="String">
+        delete from live_store_withdrawals_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

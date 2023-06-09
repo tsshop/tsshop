@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveGiftDetailMapper">
+    
+    <resultMap type="LiveGiftDetail" id="LiveGiftDetailResult">
+        <result property="id"    column="id"    />
+        <result property="giftId"    column="gift_id"    />
+        <result property="fromUserId"    column="from_user_id"    />
+        <result property="toUserId"    column="to_user_id"    />
+        <result property="number"    column="number"    />
+        <result property="liveId"    column="live_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectLiveGiftDetailVo">
+        select lgd.id, gift_id, lg.gift_name as liveGiftName, from_user_id, to_user_id, number,  live_id, lgd.create_time, lgd.update_time from live_gift_detail as lgd
+    </sql>
+
+    <select id="selectLiveGiftDetailList" parameterType="LiveGiftDetail" resultMap="LiveGiftDetailResult">
+        <include refid="selectLiveGiftDetailVo"/>
+        left join live_gift as lg on lg.id = lgd.gift_id
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="giftId != null "> and gift_id = #{giftId}</if>
+            <if test="liveGiftName != null "> and lg.gift_name like concat('%', #{liveGiftName}, '%')</if>
+            <if test="fromUserId != null "> and from_user_id = #{fromUserId}</if>
+            <if test="toUserId != null "> and to_user_id = #{toUserId}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="liveId != null "> and live_id = #{liveId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveGiftDetailById" parameterType="Long" resultMap="LiveGiftDetailResult">
+        <include refid="selectLiveGiftDetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveGiftDetail" parameterType="LiveGiftDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into live_gift_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="giftId != null">gift_id,</if>
+            <if test="fromUserId != null">from_user_id,</if>
+            <if test="toUserId != null">to_user_id,</if>
+            <if test="number != null">number,</if>
+            <if test="liveId != null">live_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="giftId != null">#{giftId},</if>
+            <if test="fromUserId != null">#{fromUserId},</if>
+            <if test="toUserId != null">#{toUserId},</if>
+            <if test="number != null">#{number},</if>
+            <if test="liveId != null">#{liveId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveGiftDetail" parameterType="LiveGiftDetail">
+        update live_gift_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="giftId != null">gift_id = #{giftId},</if>
+            <if test="fromUserId != null">from_user_id = #{fromUserId},</if>
+            <if test="toUserId != null">to_user_id = #{toUserId},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="liveId != null">live_id = #{liveId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveGiftDetailById" parameterType="Long">
+        delete from live_gift_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveGiftDetailByIds" parameterType="String">
+        delete from live_gift_detail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

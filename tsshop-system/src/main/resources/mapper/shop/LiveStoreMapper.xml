@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveStoreMapper">
+    
+    <resultMap type="LiveStore" id="LiveStoreResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="storeName"    column="store_name"    />
+        <result property="storePhone"    column="store_phone"    />
+        <result property="storeHeadPortrait"    column="store_head_portrait"    />
+        <result property="amt"    column="amt"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleted"    column="deleted"    />
+    </resultMap>
+
+    <sql id="selectLiveStoreVo">
+        select id, user_id, store_name, store_phone, store_head_portrait, amt, create_time, update_time, deleted from live_store
+    </sql>
+
+    <select id="selectLiveStoreList" parameterType="LiveStore" resultMap="LiveStoreResult">
+        <include refid="selectLiveStoreVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="storeName != null  and storeName != ''"> and store_name like concat('%', #{storeName}, '%')</if>
+            <if test="storePhone != null  and storePhone != ''"> and store_phone like concat('%', #{storePhone}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveStoreById" parameterType="Long" resultMap="LiveStoreResult">
+        <include refid="selectLiveStoreVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveStore" parameterType="LiveStore" useGeneratedKeys="true" keyProperty="id">
+        insert into live_store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="storeName != null">store_name,</if>
+            <if test="storePhone != null">store_phone,</if>
+            <if test="storeHeadPortrait != null">store_head_portrait,</if>
+            <if test="amt != null">amt,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleted != null">deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="storeName != null">#{storeName},</if>
+            <if test="storePhone != null">#{storePhone},</if>
+            <if test="storeHeadPortrait != null">#{storeHeadPortrait},</if>
+            <if test="amt != null">#{amt},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveStore" parameterType="LiveStore">
+        update live_store
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="storeName != null">store_name = #{storeName},</if>
+            <if test="storePhone != null">store_phone = #{storePhone},</if>
+            <if test="storeHeadPortrait != null">store_head_portrait = #{storeHeadPortrait},</if>
+            <if test="amt != null">amt = #{amt},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveStoreById" parameterType="Long">
+        delete from live_store where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveStoreByIds" parameterType="String">
+        delete from live_store where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

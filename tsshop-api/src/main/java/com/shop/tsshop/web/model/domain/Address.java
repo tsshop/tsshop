@@ -1,0 +1,108 @@
+package com.shop.tsshop.web.model.domain;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+/**
+ * <p>
+ * 用户收货地址表
+ * </p>
+ *
+ * @author xu
+ * @since 2023-02-07
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class Address implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 收货地址ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
+
+    /**
+     * 用户ID
+     */
+    private Long userId;
+
+    /**
+     * 收货人姓名
+     */
+    private String name;
+
+    /**
+     * 收货电话
+     */
+    private String phone;
+
+    /**
+     * 省ID
+     */
+    private Long province;
+
+    /**
+     * 市ID
+     */
+    private Long city;
+
+    /**
+     * 区ID
+     */
+    private Long area;
+
+    /**
+     * 省
+     */
+    private String provinceName;
+
+    /**
+     * 市
+     */
+    private String cityName;
+
+    /**
+     * 区
+     */
+    private String areaName;
+
+
+    /**
+     * 详细地址
+     */
+    private String detailAddr;
+
+    /**
+     * 是否已删除 （1：正常/-1：删除）
+     */
+    private Integer deleted;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+
+    /**
+     * 是否默认收货地址（2：否/1：是)
+     */
+    private Integer defaultCargo;
+
+
+}

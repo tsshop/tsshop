@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.ReturnOrderMapper">
+    
+    <resultMap type="ReturnOrder" id="ReturnOrderResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="reallyAmt"    column="really_amt"    />
+        <result property="orderAmt"    column="order_amt"    />
+        <result property="returnAmt"    column="return_amt"    />
+        <result property="returnReason"    column="return_reason"    />
+        <result property="returnImg"    column="return_img"    />
+        <result property="returnType"    column="return_type"    />
+        <result property="returnDetail"    column="return_detail"    />
+        <result property="addressId"    column="address_id"    />
+        <result property="status"    column="status"    />
+        <result property="expressName"    column="express_name"    />
+        <result property="expressNo"    column="express_no"    />
+        <result property="express"    column="express"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="refuseDetail"    column="refuse_detail"    />
+        <result property="outRefundNo"    column="out_refund_no"    />
+    </resultMap>
+
+    <sql id="selectReturnOrderVo">
+        select id, user_id, order_no, really_amt, order_amt, return_amt, return_reason, return_img, return_type, return_detail, address_id, status, express_name, express_no, express, create_time, update_time, refuse_detail, out_refund_no from return_order
+    </sql>
+
+    <select id="selectReturnOrderList" parameterType="ReturnOrder" resultMap="ReturnOrderResult">
+        <include refid="selectReturnOrderVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="reallyAmt != null "> and really_amt = #{reallyAmt}</if>
+            <if test="orderAmt != null "> and order_amt = #{orderAmt}</if>
+            <if test="returnAmt != null "> and return_amt = #{returnAmt}</if>
+            <if test="returnReason != null  and returnReason != ''"> and return_reason = #{returnReason}</if>
+            <if test="returnImg != null  and returnImg != ''"> and return_img = #{returnImg}</if>
+            <if test="returnType != null "> and return_type = #{returnType}</if>
+            <if test="returnDetail != null  and returnDetail != ''"> and return_detail = #{returnDetail}</if>
+            <if test="addressId != null "> and address_id = #{addressId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="expressName != null  and expressName != ''"> and express_name like concat('%', #{expressName}, '%')</if>
+            <if test="expressNo != null  and expressNo != ''"> and express_no = #{expressNo}</if>
+            <if test="express != null  and express != ''"> and express = #{express}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+            <if test="refuseDetail != null  and refuseDetail != ''"> and refuse_detail = #{refuseDetail}</if>
+            <if test="outRefundNo != null  and outRefundNo != ''"> and out_refund_no = #{outRefundNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectReturnOrderById" parameterType="Long" resultMap="ReturnOrderResult">
+        <include refid="selectReturnOrderVo"/>
+        where id = #{id}
+    </select>
+    <select id="getMonthly" resultType="java.lang.Integer">
+        SELECT count(*) FROM `return_order` WHERE date_format(curdate(),'%y%m') = date_format(update_time,'%y%m') and `status`=#{status}
+    </select>
+
+    <insert id="insertReturnOrder" parameterType="ReturnOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into return_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="orderNo != null">order_no,</if>
+            <if test="reallyAmt != null">really_amt,</if>
+            <if test="orderAmt != null">order_amt,</if>
+            <if test="returnAmt != null">return_amt,</if>
+            <if test="returnReason != null">return_reason,</if>
+            <if test="returnImg != null">return_img,</if>
+            <if test="returnType != null">return_type,</if>
+            <if test="returnDetail != null">return_detail,</if>
+            <if test="addressId != null">address_id,</if>
+            <if test="status != null">status,</if>
+            <if test="expressName != null">express_name,</if>
+            <if test="expressNo != null">express_no,</if>
+            <if test="express != null">express,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="refuseDetail != null">refuse_detail,</if>
+            <if test="outRefundNo != null">out_refund_no,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="reallyAmt != null">#{reallyAmt},</if>
+            <if test="orderAmt != null">#{orderAmt},</if>
+            <if test="returnAmt != null">#{returnAmt},</if>
+            <if test="returnReason != null">#{returnReason},</if>
+            <if test="returnImg != null">#{returnImg},</if>
+            <if test="returnType != null">#{returnType},</if>
+            <if test="returnDetail != null">#{returnDetail},</if>
+            <if test="addressId != null">#{addressId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="expressName != null">#{expressName},</if>
+            <if test="expressNo != null">#{expressNo},</if>
+            <if test="express != null">#{express},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="refuseDetail != null">#{refuseDetail},</if>
+            <if test="outRefundNo != null">#{outRefundNo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReturnOrder" parameterType="ReturnOrder">
+        update return_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="reallyAmt != null">really_amt = #{reallyAmt},</if>
+            <if test="orderAmt != null">order_amt = #{orderAmt},</if>
+            <if test="returnAmt != null">return_amt = #{returnAmt},</if>
+            <if test="returnReason != null">return_reason = #{returnReason},</if>
+            <if test="returnImg != null">return_img = #{returnImg},</if>
+            <if test="returnType != null">return_type = #{returnType},</if>
+            <if test="returnDetail != null">return_detail = #{returnDetail},</if>
+            <if test="addressId != null">address_id = #{addressId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="expressName != null">express_name = #{expressName},</if>
+            <if test="expressNo != null">express_no = #{expressNo},</if>
+            <if test="express != null">express = #{express},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="refuseDetail != null">refuse_detail = #{refuseDetail},</if>
+            <if test="outRefundNo != null">out_refund_no = #{outRefundNo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReturnOrderById" parameterType="Long">
+        delete from return_order where id = #{id}
+    </delete>
+
+    <delete id="deleteReturnOrderByIds" parameterType="String">
+        delete from return_order where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

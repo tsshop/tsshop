@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.OrderMapper">
+
+    <resultMap type="Order" id="OrderResult">
+        <result property="id"    column="id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="userId"    column="user_id"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="addressId"    column="address_id"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="amount"    column="amount"    />
+        <result property="price"    column="price"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="freight"    column="freight"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="payTime"    column="pay_time"    />
+        <result property="sendTime"    column="send_time"    />
+        <result property="payNo"    column="pay_no"    />
+        <result property="expressNo"    column="express_no"    />
+        <result property="express"    column="express"    />
+        <result property="orderNoPay"    column="order_no_pay"    />
+        <result property="returnId"    column="return_id"    />
+        <result property="remark"    column="remark"    />
+        <result property="ip"    column="ip"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="orderType"    column="order_type"    />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select id, order_no, user_id, sku_id, goods_id, address_id, total_amount, amount, price, quantity, freight, order_status, pay_time, send_time, pay_no, express_no, express, order_no_pay, return_id, remark, ip, create_time, update_time, deleted, pay_type, pay_thoroughfare_id , pay_log_id , order_type from `order`
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="skuId != null "> and sku_id = #{skuId}</if>
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="addressId != null "> and address_id = #{addressId}</if>
+            <if test="totalAmount != null "> and total_amount = #{totalAmount}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="quantity != null "> and quantity = #{quantity}</if>
+            <if test="freight != null "> and freight = #{freight}</if>
+            <if test="orderStatus != null "> and order_status = #{orderStatus}</if>
+            <if test="params.beginPayTime != null and params.beginPayTime != '' and params.endPayTime != null and params.endPayTime != ''"> and pay_time between #{params.beginPayTime} and #{params.endPayTime}</if>
+            <if test="params.beginSendTime != null and params.beginSendTime != '' and params.endSendTime != null and params.endSendTime != ''"> and send_time between #{params.beginSendTime} and #{params.endSendTime}</if>
+            <if test="payNo != null  and payNo != ''"> and pay_no = #{payNo}</if>
+            <if test="expressNo != null  and expressNo != ''"> and express_no = #{expressNo}</if>
+            <if test="express != null  and express != ''"> and express = #{express}</if>
+            <if test="orderNoPay != null  and orderNoPay != ''"> and order_no_pay = #{orderNoPay}</if>
+            <if test="returnId != null "> and return_id = #{returnId}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+            <if test="orderType != null "> and order_type = #{orderType}</if>
+        </where>
+    </select>
+
+    <select id="selectOrderById" parameterType="Long" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectByOrderNo" resultType="com.ts.shop.domain.Order">
+        <include refid="selectOrderVo"/>
+        where order_no = #{orderNo}
+    </select>
+
+    <select id="getDailyOrder" resultType="java.lang.Integer">
+        SELECT count(1) FROM `order` WHERE TO_DAYS(pay_time)=TO_DAYS(NOW())
+    </select>
+    <select id="getDailySales" resultType="java.lang.Double">
+        SELECT IFNULL(sum(total_amount),0) FROM `order` WHERE TO_DAYS(pay_time)=TO_DAYS(NOW())
+    </select>
+    <select id="getMonthlySalesList" resultType="com.ts.shop.domain.vo.MonthlySalesListVo">
+        SELECT IFNULL(sum(total_amount),0) as amt,FROM_DAYS(TO_DAYS(pay_time)) as `time` FROM `order`
+        WHERE date_format(curdate(),'%y%m') = date_format(pay_time,'%y%m') GROUP BY FROM_DAYS(TO_DAYS(pay_time))
+    </select>
+    <select id="getMonthlyOrderList" resultType="com.ts.shop.domain.vo.MonthlyOrderListVo">
+        SELECT count(1) as num, FROM_DAYS(TO_DAYS(pay_time)) as `time` FROM `order`
+        WHERE date_format(curdate(),'%y%m') = date_format(pay_time,'%y%m') GROUP BY FROM_DAYS(TO_DAYS(pay_time))
+    </select>
+    <select id="getMonthlyReturn" resultType="java.lang.Integer">
+        SELECT count(*) FROM `return_order` WHERE date_format(curdate(),'%y%m') = date_format(create_time,'%y%m') and `status`=3
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT sum(total_amount)*100 FROM `order` WHERE pay_no=#{payNo}
+    </select>
+    <select id="getAmtRanking" resultType="com.ts.shop.domain.vo.RankingListVo">
+        SELECT sum(o.total_amount) as amt ,g.`name`,o.goods_id as id FROM `order` o
+        LEFT JOIN goods g on o.goods_id=g.id
+        WHERE o.pay_no is not null and
+        <if test="status=='1'.toString()"> to_days(o.pay_time) = to_days(now()) </if>
+        <if test="status=='2'.toString()"> YEARWEEK(date_format(o.pay_time,'%Y-%m-%d'),1) = YEARWEEK(now(),1) </if>
+        <if test="status=='3'.toString()"> DATE_FORMAT(o.pay_time,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m') </if>
+        GROUP BY o.goods_id ORDER BY sum(o.total_amount) desc limit 10
+    </select>
+    <select id="getNumRanking" resultType="com.ts.shop.domain.vo.RankingListVo">
+        SELECT count(o.total_amount) as num,g.`name`,o.goods_id as id FROM `order` o
+        LEFT JOIN goods g on o.goods_id=g.id
+        WHERE o.pay_no is not null and
+        <if test="status=='1'.toString()"> to_days(o.pay_time) = to_days(now()) </if>
+        <if test="status=='2'.toString()"> YEARWEEK(date_format(o.pay_time,'%Y-%m-%d'),1) = YEARWEEK(now(),1) </if>
+        <if test="status=='3'.toString()"> DATE_FORMAT(o.pay_time,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m') </if>
+        GROUP BY o.goods_id ORDER BY count(o.total_amount) desc limit 10
+
+    </select>
+
+    <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+        insert into `order`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="skuId != null">sku_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="addressId != null">address_id,</if>
+            <if test="totalAmount != null">total_amount,</if>
+            <if test="amount != null">amount,</if>
+            <if test="price != null">price,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="freight != null">freight,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="sendTime != null">send_time,</if>
+            <if test="payNo != null">pay_no,</if>
+            <if test="expressNo != null">express_no,</if>
+            <if test="express != null">express,</if>
+            <if test="orderNoPay != null">order_no_pay,</if>
+            <if test="returnId != null">return_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="ip != null">ip,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleted != null">deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="skuId != null">#{skuId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="addressId != null">#{addressId},</if>
+            <if test="totalAmount != null">#{totalAmount},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="price != null">#{price},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="freight != null">#{freight},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="sendTime != null">#{sendTime},</if>
+            <if test="payNo != null">#{payNo},</if>
+            <if test="expressNo != null">#{expressNo},</if>
+            <if test="express != null">#{express},</if>
+            <if test="orderNoPay != null">#{orderNoPay},</if>
+            <if test="returnId != null">#{returnId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrder" parameterType="Order">
+        update `order`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="addressId != null">address_id = #{addressId},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="freight != null">freight = #{freight},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="sendTime != null">send_time = #{sendTime},</if>
+            <if test="payNo != null">pay_no = #{payNo},</if>
+            <if test="expressNo != null">express_no = #{expressNo},</if>
+            <if test="express != null">express = #{express},</if>
+            <if test="orderNoPay != null">order_no_pay = #{orderNoPay},</if>
+            <if test="returnId != null">return_id = #{returnId},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrderById" parameterType="Long">
+        delete from `order` where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderByIds" parameterType="String">
+        delete from `order` where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="liveGiftOrderList" resultType="com.ts.shop.domain.vo.LiveGiftOrderListVo">
+        SELECT
+            o.id          as  orderId,
+            o.user_id     as  userId,
+            o.order_no    as  orderNo,
+            o.goods_id    as  liveGiftId,
+            lg.gift_name  as  liveGiftName,
+            o.quantity    as  liveGiftNum,
+            pl.pay_amount as  payAmt,
+            pl.pay_type   as  payType,
+            pl.pay_time   as  payTime,
+            o.create_time as  createTime
+        FROM
+            `order`      as  o
+        LEFT JOIN
+            pay_log      as pl
+        ON
+            o.pay_log_id = pl.id
+        LEFT JOIN
+            live_gift    as  lg
+        ON
+            o.goods_id = lg.id
+        WHERE
+            o.order_type  = 1
+        <if test="dto.orderId != null"> and o.id = #{dto.orderId}</if>
+        <if test="dto.userId != null"> and o.user_id = #{dto.userId}</if>
+        <if test="dto.orderNo != null"> and o.order_no like concat('%', #{dto.orderNo}, '%')</if>
+        <if test="dto.liveGiftName != null"> and lg.gift_name like concat('%', #{dto.liveGiftName}, '%')</if>
+        <if test="dto.liveGiftId != null"> and o.goods_id = #{dto.liveGiftId}</if>
+        <if test="dto.payType != null"> and pl.pay_type = #{dto.payType}</if>
+        <if test="dto.createStartTime != null and dto.createStartTime != '' and dto.createEndTime != null and dto.createEndTime != ''"> and o.create_time between #{dto.createStartTime} AND #{dto.createEndTime}</if>
+        <if test="dto.payStartTime != null and dto.payStartTime != '' and dto.payEndTime != null and dto.payEndTime != ''">and pl.pay_time between #{dto.payStartTime} AND #{dto.payEndTime}</if>
+        order By o.create_time Desc
+    </select>
+    <select id="selectCountSalesRanking" resultType="com.ts.shop.domain.vo.SalesRankingVo">
+        SELECT
+            g.id                      as id,
+            g.head_portrait           as img,
+            g.`name`                  as name,
+            sum(o.quantity)           as saleNum,
+            sum(o.total_amount)       as saleMoney
+        FROM `order` AS o
+        LEFT JOIN goods AS g
+        ON o.goods_id = g.id
+        WHERE o.pay_time between #{startTime} AND #{entTime}
+        and g.id IS NOT NULL
+        GROUP BY o.goods_id ORDER BY saleNum desc limit 10
+    </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.PayLogMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.PayLog">
+    <!--@mbg.generated-->
+    <!--@Table pay_log-->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="pay_no" jdbcType="VARCHAR" property="payNo" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="pay_thoroughfare_id" jdbcType="VARCHAR" property="payThoroughfareId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, order_id, pay_no, pay_time, pay_amount, pay_type, pay_thoroughfare_id, create_time, 
+    update_time
+  </sql>
+</mapper>

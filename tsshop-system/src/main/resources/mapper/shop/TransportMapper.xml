@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.TransportMapper">
+  <resultMap id="BaseResultMap" type="com.ts.shop.domain.Transport">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="transport_id" jdbcType="BIGINT" property="transportId" />
+    <result column="trans_name" jdbcType="VARCHAR" property="transName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="charge_type" jdbcType="INTEGER" property="chargeType" />
+    <result column="is_free_fee" jdbcType="INTEGER" property="isFreeFee" />
+    <result column="has_free_condition" jdbcType="INTEGER" property="hasFreeCondition" />
+  </resultMap>
+  
+ <resultMap id="TransportAndTransfeeAndTranscityMap" type="com.ts.shop.domain.Transport">
+    <id column="transport_id" jdbcType="BIGINT" property="transportId" />
+    <result column="trans_name" jdbcType="VARCHAR" property="transName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="charge_type" jdbcType="TINYINT" property="chargeType" />
+    <result column="is_free_fee" jdbcType="TINYINT" property="isFreeFee" />
+    <result column="has_free_condition" jdbcType="INTEGER" property="hasFreeCondition" />
+    <collection property="transfees" ofType="com.ts.shop.domain.Transfee">
+        <result column="transfee_id" jdbcType="BIGINT" property="transfeeId" />
+	    <result column="transport_id" jdbcType="BIGINT" property="transportId" />
+	    <result column="continuous_piece" jdbcType="DECIMAL" property="continuousPiece" />
+	    <result column="first_piece" jdbcType="DECIMAL" property="firstPiece" />
+	    <result column="continuous_fee" jdbcType="DECIMAL" property="continuousFee" />
+	    <result column="first_fee" jdbcType="DECIMAL" property="firstFee" />
+	    <collection property="cityList" ofType="com.ts.shop.domain.Area" >
+	        <id column="area_id" jdbcType="BIGINT" property="areaId" />
+		    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+		    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+		    <result column="level" jdbcType="INTEGER" property="level" />
+	    </collection>
+    </collection>
+  </resultMap>
+  
+  <resultMap id="TransfeeFreeAndTranscityFreeMap" type="com.ts.shop.domain.TransfeeFree">
+      <id column="transfee_free_id" jdbcType="BIGINT" property="transfeeFreeId" />
+      <result column="transport_id" jdbcType="BIGINT" property="transportId" />
+      <result column="free_type" jdbcType="TINYINT" property="freeType" />
+      <result column="amount" jdbcType="DECIMAL" property="amount" />
+      <result column="piece" jdbcType="DECIMAL" property="piece" />
+      <collection property="freeCityList" ofType="com.ts.shop.domain.Area">
+          <id column="area_id" jdbcType="BIGINT" property="areaId" />
+          <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+          <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+          <result column="level" jdbcType="INTEGER" property="level" />
+      </collection>
+  </resultMap>
+    <insert id="insert" parameterType="Transport" useGeneratedKeys="true" keyProperty="transportId">
+        insert into transport
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="transName != null">trans_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="chargeType != null">charge_type,</if>
+            <if test="isFreeFee != null">is_free_fee,</if>
+            <if test="hasFreeCondition != null">has_free_condition,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="transName != null">#{transName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="chargeType != null">#{chargeType},</if>
+            <if test="isFreeFee != null">#{isFreeFee},</if>
+            <if test="hasFreeCondition != null">#{hasFreeCondition},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTransport" parameterType="Transport">
+        update transport
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transName != null">trans_name = #{transName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="chargeType != null">charge_type = #{chargeType},</if>
+            <if test="isFreeFee != null">is_free_fee = #{isFreeFee},</if>
+            <if test="hasFreeCondition != null">has_free_condition = #{hasFreeCondition},</if>
+        </trim>
+        where transport_id = #{transportId}
+    </update>
+
+    <select id="getTransportAndTransfeeAndTranscity" resultMap="TransportAndTransfeeAndTranscityMap">
+    select port.*,fee.*,city.*,ta.* from transport port
+    left join transfee fee on port.transport_id = fee.transport_id
+    left join transcity city on fee.transfee_id = city.transfee_id
+    left join area ta on city.city_id = ta.area_id
+    where port.transport_id = #{id} order by fee.transfee_id
+  </select>
+  
+  <select id="getTransfeeFreeAndTranscityFreeByTransportId" resultMap="TransfeeFreeAndTranscityFreeMap">
+    select feefree.*,cityfree.*,ta.* from transfee_free feefree
+    left join transcity_free cityfree on feefree.transfee_free_id = cityfree.transfee_free_id
+    left join area ta on cityfree.free_city_id = ta.area_id
+    where feefree.transport_id = #{transportId} order by feefree.transfee_free_id
+  </select>
+
+    <delete id="deleteTransports">
+    delete from transport where transport_id in
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">
+    #{id}
+    </foreach>
+  </delete>
+
+
+    <resultMap type="Transport" id="TransportResult">
+        <result property="transportId"    column="transport_id"    />
+        <result property="transName"    column="trans_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="chargeType"    column="charge_type"    />
+        <result property="isFreeFee"    column="is_free_fee"    />
+        <result property="hasFreeCondition"    column="has_free_condition"    />
+    </resultMap>
+    <sql id="selectTransportVo">
+        select transport_id, trans_name, create_time, shop_id, charge_type, is_free_fee, has_free_condition from transport
+    </sql>
+    <select id="selectTransportList" parameterType="Transport" resultMap="TransportResult">
+        <include refid="selectTransportVo"/>
+        <where>
+            <if test="transportId != null "> and transport_id = #{transportId}</if>
+            <if test="transName != null  and transName != ''"> and trans_name like concat('%', #{transName}, '%')</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="chargeType != null "> and charge_type = #{chargeType}</if>
+            <if test="isFreeFee != null "> and is_free_fee = #{isFreeFee}</if>
+            <if test="hasFreeCondition != null "> and has_free_condition = #{hasFreeCondition}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.GoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.Goods">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="price" property="price" />
+        <result column="shelves" property="shelves" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="head_portrait" property="headPortrait" />
+        <result column="detail" property="detail" />
+        <result column="purchase_quantity" property="purchaseQuantity" />
+        <result column="goods_type_id" property="goodsTypeId" />
+        <result column="csno" property="csno" />
+        <result column="unit_name" property="unitName" />
+        <result column="scribing_price" property="scribingPrice" />
+        <result column="stock_number" property="stockNumber" />
+        <result column="sort" property="sort" />
+        <result column="delivery_template_id" property="deliveryTemplateId" />
+        <result column="weight" property="weight" />
+        <result column="volume" property="volume" />
+        <result column="area_id" property="areaId" />
+        <result column="store_id" property="storeId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, price, shelves, deleted, create_time, update_time, head_portrait, detail, purchase_quantity, goods_type_id, csno, unit_name, scribing_price, stock_number, sort, delivery_template_id, weight, volume, area_id, store_id
+    </sql>
+    <update id="updateStock">
+        UPDATE `goods` set stock_number=stock_number-#{num} WHERE id=#{id} and stock_number>=#{num}
+    </update>
+    <update id="updateQuantity">
+        UPDATE `goods` set purchase_quantity=purchase_quantity+#{quantity} WHERE id=#{goodsId}
+    </update>
+    <select id="getList" resultType="com.shop.tsshop.web.model.domain.Goods">
+        select * from goods
+        <where>
+            deleted = 0
+            and shelves = 2
+            <if test="typeId != null  and typeId != ''"> and goods_type_id = #{typeId}</if>
+            <if test="keyword != null  and keyword != ''"> and `name` like concat('%', #{keyword}, '%')</if>
+            <if test="priceMax != null  and priceMax != ''"> and price &lt;= #{priceMax}</if>
+            <if test="priceMin != null  and priceMin != ''"> and price &gt;= #{priceMin} </if>
+        </where>
+
+    </select>
+
+</mapper>

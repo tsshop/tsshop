@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.ShopCartMapper">
+    
+    <resultMap type="ShopCart" id="ShopCartResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="amt"    column="amt"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="status"    column="status"    />
+        <result property="purchaseQuantity"    column="purchase_quantity"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="deleted"    column="deleted"    />
+    </resultMap>
+
+    <sql id="selectShopCartVo">
+        select id, user_id, goods_id, amt, total_amount, status, purchase_quantity, sku_id, update_time, create_time, deleted from shop_cart
+    </sql>
+
+    <select id="selectShopCartList" parameterType="ShopCart" resultMap="ShopCartResult">
+        <include refid="selectShopCartVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="amt != null "> and amt = #{amt}</if>
+            <if test="totalAmount != null "> and total_amount = #{totalAmount}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="purchaseQuantity != null "> and purchase_quantity = #{purchaseQuantity}</if>
+            <if test="skuId != null "> and sku_id = #{skuId}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectShopCartById" parameterType="Long" resultMap="ShopCartResult">
+        <include refid="selectShopCartVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertShopCart" parameterType="ShopCart" useGeneratedKeys="true" keyProperty="id">
+        insert into shop_cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="amt != null">amt,</if>
+            <if test="totalAmount != null">total_amount,</if>
+            <if test="status != null">status,</if>
+            <if test="purchaseQuantity != null">purchase_quantity,</if>
+            <if test="skuId != null">sku_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="deleted != null">deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="amt != null">#{amt},</if>
+            <if test="totalAmount != null">#{totalAmount},</if>
+            <if test="status != null">#{status},</if>
+            <if test="purchaseQuantity != null">#{purchaseQuantity},</if>
+            <if test="skuId != null">#{skuId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateShopCart" parameterType="ShopCart">
+        update shop_cart
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="amt != null">amt = #{amt},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="purchaseQuantity != null">purchase_quantity = #{purchaseQuantity},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteShopCartById" parameterType="Long">
+        delete from shop_cart where id = #{id}
+    </delete>
+
+    <delete id="deleteShopCartByIds" parameterType="String">
+        delete from shop_cart where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

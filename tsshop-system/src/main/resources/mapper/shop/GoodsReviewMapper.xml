@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.GoodsReviewMapper">
+    
+    <resultMap type="GoodsReview" id="GoodsReviewResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="score"    column="score"    />
+        <result property="review"    column="review"    />
+        <result property="imgs"    column="imgs"    />
+        <result property="anonymous"    column="anonymous"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGoodsReviewVo">
+        select id, goods_id, order_id, user_id, score, review, imgs, anonymous, create_time, update_time from goods_review
+    </sql>
+
+    <select id="selectGoodsReviewList" parameterType="GoodsReview" resultMap="GoodsReviewResult">
+        <include refid="selectGoodsReviewVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="goodsId != null "> and goods_id = #{goodsId}</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="review != null  and review != ''"> and review = #{review}</if>
+            <if test="imgs != null  and imgs != ''"> and imgs = #{imgs}</if>
+            <if test="anonymous != null "> and anonymous = #{anonymous}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsReviewById" parameterType="Long" resultMap="GoodsReviewResult">
+        <include refid="selectGoodsReviewVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGoodsReview" parameterType="GoodsReview" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="score != null">score,</if>
+            <if test="review != null">review,</if>
+            <if test="imgs != null">imgs,</if>
+            <if test="anonymous != null">anonymous,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="score != null">#{score},</if>
+            <if test="review != null">#{review},</if>
+            <if test="imgs != null">#{imgs},</if>
+            <if test="anonymous != null">#{anonymous},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoodsReview" parameterType="GoodsReview">
+        update goods_review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="review != null">review = #{review},</if>
+            <if test="imgs != null">imgs = #{imgs},</if>
+            <if test="anonymous != null">anonymous = #{anonymous},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGoodsReviewById" parameterType="Long">
+        delete from goods_review where id = #{id}
+    </delete>
+
+    <delete id="deleteGoodsReviewByIds" parameterType="String">
+        delete from goods_review where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

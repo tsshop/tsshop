@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.TsshopConfigStorageMapper">
+    
+    <resultMap type="TsshopConfigStorage" id="TsshopConfigStorageResult">
+        <result property="id"    column="id"    />
+        <result property="openStatus"    column="open_status"    />
+        <result property="storageType"    column="storage_type"    />
+        <result property="storageLocation"    column="storage_location"    />
+        <result property="config"    column="config"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTsshopConfigStorageVo">
+        select id, open_status, storage_type, storage_location, config, create_time, update_time from tsshop_config_storage
+    </sql>
+
+    <select id="selectTsshopConfigStorageList" parameterType="TsshopConfigStorage" resultMap="TsshopConfigStorageResult">
+        <include refid="selectTsshopConfigStorageVo"/>
+        <where>  
+            <if test="openStatus != null "> and open_status = #{openStatus}</if>
+            <if test="storageType != null  and storageType != ''"> and storage_type = #{storageType}</if>
+            <if test="storageLocation != null  and storageLocation != ''"> and storage_location = #{storageLocation}</if>
+            <if test="config != null  and config != ''"> and config = #{config}</if>
+        </where>
+    </select>
+    
+    <select id="selectTsshopConfigStorageById" parameterType="Long" resultMap="TsshopConfigStorageResult">
+        <include refid="selectTsshopConfigStorageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTsshopConfigStorage" parameterType="TsshopConfigStorage" useGeneratedKeys="true" keyProperty="id">
+        insert into tsshop_config_storage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openStatus != null">open_status,</if>
+            <if test="storageType != null">storage_type,</if>
+            <if test="storageLocation != null">storage_location,</if>
+            <if test="config != null">config,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openStatus != null">#{openStatus},</if>
+            <if test="storageType != null">#{storageType},</if>
+            <if test="storageLocation != null">#{storageLocation},</if>
+            <if test="config != null">#{config},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTsshopConfigStorage" parameterType="TsshopConfigStorage">
+        update tsshop_config_storage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openStatus != null">open_status = #{openStatus},</if>
+            <if test="storageType != null">storage_type = #{storageType},</if>
+            <if test="storageLocation != null">storage_location = #{storageLocation},</if>
+            <if test="config != null">config = #{config},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTsshopConfigStorageById" parameterType="Long">
+        delete from tsshop_config_storage where id = #{id}
+    </delete>
+
+    <delete id="deleteTsshopConfigStorageByIds" parameterType="String">
+        delete from tsshop_config_storage where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

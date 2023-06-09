@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.ConfigMapper">
+    
+    <resultMap type="Config" id="ConfigResult">
+        <result property="id"    column="id"    />
+        <result property="configKey"    column="config_key"    />
+        <result property="configValue"    column="config_value"    />
+        <result property="title"    column="title"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isFront"    column="is_front"    />
+    </resultMap>
+
+    <sql id="selectConfigVo">
+        select id, config_key, config_value, title, remark, create_time, update_time, is_front from config
+    </sql>
+
+    <select id="selectConfigList" parameterType="Config" resultMap="ConfigResult">
+        <include refid="selectConfigVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="configKey != null  and configKey != ''"> and config_key = #{configKey}</if>
+            <if test="configValue != null  and configValue != ''"> and config_value = #{configValue}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="isFront != null "> and is_front = #{isFront}</if>
+        </where>
+    </select>
+    
+    <select id="selectConfigById" parameterType="Long" resultMap="ConfigResult">
+        <include refid="selectConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertConfig" parameterType="Config" useGeneratedKeys="true" keyProperty="id">
+        insert into config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="configKey != null and configKey != ''">config_key,</if>
+            <if test="configValue != null and configValue != ''">config_value,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isFront != null">is_front,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="configKey != null and configKey != ''">#{configKey},</if>
+            <if test="configValue != null and configValue != ''">#{configValue},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isFront != null">#{isFront},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConfig" parameterType="Config">
+        update config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="configKey != null and configKey != ''">config_key = #{configKey},</if>
+            <if test="configValue != null and configValue != ''">config_value = #{configValue},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isFront != null">is_front = #{isFront},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConfigById" parameterType="Long">
+        delete from config where id = #{id}
+    </delete>
+
+    <delete id="deleteConfigByIds" parameterType="String">
+        delete from config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

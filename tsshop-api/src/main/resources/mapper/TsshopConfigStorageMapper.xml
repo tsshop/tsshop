@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.tsshop.web.mapper.TsshopConfigStorageMapper">
+  <resultMap id="BaseResultMap" type="com.shop.tsshop.web.model.domain.TsshopConfigStorage">
+    <!--@mbg.generated-->
+    <!--@Table tsshop_config_storage-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="open_status" jdbcType="BOOLEAN" property="openStatus" />
+    <result column="storage_type" jdbcType="VARCHAR" property="storageType" />
+    <result column="storage_location" jdbcType="VARCHAR" property="storageLocation" />
+    <result column="config" jdbcType="VARCHAR" property="config" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, open_status, storage_type, storage_location, config, create_time, update_time
+  </sql>
+</mapper>

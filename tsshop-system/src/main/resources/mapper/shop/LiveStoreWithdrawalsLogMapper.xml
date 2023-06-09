@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveStoreWithdrawalsLogMapper">
+    
+    <resultMap type="LiveStoreWithdrawalsLog" id="LiveStoreWithdrawalsLogResult">
+        <result property="id"    column="id"    />
+        <result property="liveStoreId"    column="live_store_id"    />
+        <result property="amt"    column="amt"    />
+        <result property="status"    column="status"    />
+        <result property="withdrawalsType"    column="withdrawals_type"    />
+        <result property="realName"    column="real_name"    />
+        <result property="account"    column="account"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="serialNumber"    column="serial_number"    />
+    </resultMap>
+
+    <sql id="selectLiveStoreWithdrawalsLogVo">
+        select id, live_store_id, amt, status, withdrawals_type, real_name, account, create_time, update_time, remark, serial_number ,fail_reason from live_store_withdrawals_log
+    </sql>
+
+    <select id="selectLiveStoreWithdrawalsLogList" parameterType="LiveStoreWithdrawalsLog" resultMap="LiveStoreWithdrawalsLogResult">
+        <include refid="selectLiveStoreWithdrawalsLogVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="liveStoreId != null "> and live_store_id = #{liveStoreId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="withdrawalsType != null "> and withdrawals_type = #{withdrawalsType}</if>
+            <if test="realName != null  and realName != ''"> and real_name like concat('%', #{realName}, '%')</if>
+            <if test="account != null  and account != ''"> and account = #{account}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="serialNumber != null  and serialNumber != ''"> and serial_number = #{serialNumber}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveStoreWithdrawalsLogById" parameterType="Long" resultMap="LiveStoreWithdrawalsLogResult">
+        <include refid="selectLiveStoreWithdrawalsLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveStoreWithdrawalsLog" parameterType="LiveStoreWithdrawalsLog" useGeneratedKeys="true" keyProperty="id">
+        insert into live_store_withdrawals_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="liveStoreId != null">live_store_id,</if>
+            <if test="amt != null">amt,</if>
+            <if test="status != null">status,</if>
+            <if test="withdrawalsType != null">withdrawals_type,</if>
+            <if test="realName != null">real_name,</if>
+            <if test="account != null">account,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="serialNumber != null">serial_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="liveStoreId != null">#{liveStoreId},</if>
+            <if test="amt != null">#{amt},</if>
+            <if test="status != null">#{status},</if>
+            <if test="withdrawalsType != null">#{withdrawalsType},</if>
+            <if test="realName != null">#{realName},</if>
+            <if test="account != null">#{account},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="serialNumber != null">#{serialNumber},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveStoreWithdrawalsLog" parameterType="LiveStoreWithdrawalsLog">
+        update live_store_withdrawals_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="liveStoreId != null">live_store_id = #{liveStoreId},</if>
+            <if test="amt != null">amt = #{amt},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="withdrawalsType != null">withdrawals_type = #{withdrawalsType},</if>
+            <if test="realName != null">real_name = #{realName},</if>
+            <if test="account != null">account = #{account},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveStoreWithdrawalsLogById" parameterType="Long">
+        delete from live_store_withdrawals_log where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveStoreWithdrawalsLogByIds" parameterType="String">
+        delete from live_store_withdrawals_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.LiveStoreIncomeLogMapper">
+    
+    <resultMap type="LiveStoreIncomeLog" id="LiveStoreIncomeLogResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="liveStoreId"    column="live_store_id"    />
+        <result property="amt"    column="amt"    />
+        <result property="incomeType"    column="income_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectLiveStoreIncomeLogVo">
+        select id, user_id, live_store_id, amt, income_type, create_time, update_time from live_store_income_log
+    </sql>
+
+    <select id="selectLiveStoreIncomeLogList" parameterType="LiveStoreIncomeLog" resultMap="LiveStoreIncomeLogResult">
+        <include refid="selectLiveStoreIncomeLogVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="liveStoreId != null  and liveStoreId != ''"> and live_store_id = #{liveStoreId}</if>
+            <if test="amt != null "> and amt = #{amt}</if>
+            <if test="incomeType != null "> and income_type = #{incomeType}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLiveStoreIncomeLogById" parameterType="Long" resultMap="LiveStoreIncomeLogResult">
+        <include refid="selectLiveStoreIncomeLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLiveStoreIncomeLog" parameterType="LiveStoreIncomeLog" useGeneratedKeys="true" keyProperty="id">
+        insert into live_store_income_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="liveStoreId != null">live_store_id,</if>
+            <if test="amt != null">amt,</if>
+            <if test="incomeType != null">income_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="liveStoreId != null">#{liveStoreId},</if>
+            <if test="amt != null">#{amt},</if>
+            <if test="incomeType != null">#{incomeType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLiveStoreIncomeLog" parameterType="LiveStoreIncomeLog">
+        update live_store_income_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="liveStoreId != null">live_store_id = #{liveStoreId},</if>
+            <if test="amt != null">amt = #{amt},</if>
+            <if test="incomeType != null">income_type = #{incomeType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLiveStoreIncomeLogById" parameterType="Long">
+        delete from live_store_income_log where id = #{id}
+    </delete>
+
+    <delete id="deleteLiveStoreIncomeLogByIds" parameterType="String">
+        delete from live_store_income_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

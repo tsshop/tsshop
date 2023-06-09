@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.GoodsPropMapper">
+    
+    <resultMap type="GoodsProp" id="GoodsPropResult">
+        <result property="id"    column="id"    />
+        <result property="propName"    column="prop_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectGoodsPropVo">
+        select id, prop_name, create_time from goods_prop
+    </sql>
+
+    <select id="selectGoodsPropList" parameterType="GoodsProp" resultMap="GoodsPropResult">
+        <include refid="selectGoodsPropVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="propName != null  and propName != ''"> and prop_name like concat('%', #{propName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsPropById" parameterType="Long" resultMap="GoodsPropResult">
+        <include refid="selectGoodsPropVo"/>
+        where id = #{id}
+    </select>
+    <select id="getListByKey" resultType="com.ts.shop.domain.GoodsProp">
+        select id, prop_name, create_time from goods_prop where prop_name in()
+    </select>
+
+    <insert id="insertGoodsProp" parameterType="GoodsProp" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_prop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="propName != null">prop_name,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="propName != null">#{propName},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoodsProp" parameterType="GoodsProp">
+        update goods_prop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propName != null">prop_name = #{propName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGoodsPropById" parameterType="Long">
+        delete from goods_prop where id = #{id}
+    </delete>
+
+    <delete id="deleteGoodsPropByIds" parameterType="String">
+        delete from goods_prop where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

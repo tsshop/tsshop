@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shop.mapper.DeliveryMapper">
+    
+    <resultMap type="Delivery" id="DeliveryResult">
+        <result property="id"    column="id"    />
+        <result property="dvyName"    column="dvy_name"    />
+        <result property="companyHomeUrl"    column="company_home_url"    />
+        <result property="recTime"    column="rec_time"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="queryUrl"    column="query_url"    />
+        <result property="expressBird"    column="express_bird"    />
+    </resultMap>
+
+    <sql id="selectDeliveryVo">
+        select id, dvy_name, company_home_url, rec_time, modify_time, query_url, express_bird from delivery
+    </sql>
+
+    <select id="selectDeliveryList" parameterType="Delivery" resultMap="DeliveryResult">
+        <include refid="selectDeliveryVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="dvyName != null  and dvyName != ''"> and dvy_name like concat('%', #{dvyName}, '%')</if>
+            <if test="companyHomeUrl != null  and companyHomeUrl != ''"> and company_home_url = #{companyHomeUrl}</if>
+            <if test="params.beginRecTime != null and params.beginRecTime != '' and params.endRecTime != null and params.endRecTime != ''"> and rec_time between #{params.beginRecTime} and #{params.endRecTime}</if>
+            <if test="params.beginModifyTime != null and params.beginModifyTime != '' and params.endModifyTime != null and params.endModifyTime != ''"> and modify_time between #{params.beginModifyTime} and #{params.endModifyTime}</if>
+            <if test="queryUrl != null  and queryUrl != ''"> and query_url = #{queryUrl}</if>
+            <if test="expressBird != null  and expressBird != ''"> and express_bird = #{expressBird}</if>
+        </where>
+    </select>
+    
+    <select id="selectDeliveryById" parameterType="Long" resultMap="DeliveryResult">
+        <include refid="selectDeliveryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDelivery" parameterType="Delivery" useGeneratedKeys="true" keyProperty="id">
+        insert into delivery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dvyName != null and dvyName != ''">dvy_name,</if>
+            <if test="companyHomeUrl != null and companyHomeUrl != ''">company_home_url,</if>
+            <if test="recTime != null">rec_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="queryUrl != null">query_url,</if>
+            <if test="expressBird != null and expressBird != ''">express_bird,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dvyName != null and dvyName != ''">#{dvyName},</if>
+            <if test="companyHomeUrl != null and companyHomeUrl != ''">#{companyHomeUrl},</if>
+            <if test="recTime != null">#{recTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="queryUrl != null">#{queryUrl},</if>
+            <if test="expressBird != null and expressBird != ''">#{expressBird},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDelivery" parameterType="Delivery">
+        update delivery
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dvyName != null and dvyName != ''">dvy_name = #{dvyName},</if>
+            <if test="companyHomeUrl != null and companyHomeUrl != ''">company_home_url = #{companyHomeUrl},</if>
+            <if test="recTime != null">rec_time = #{recTime},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+            <if test="queryUrl != null">query_url = #{queryUrl},</if>
+            <if test="expressBird != null and expressBird != ''">express_bird = #{expressBird},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDeliveryById" parameterType="Long">
+        delete from delivery where id = #{id}
+    </delete>
+
+    <delete id="deleteDeliveryByIds" parameterType="String">
+        delete from delivery where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
